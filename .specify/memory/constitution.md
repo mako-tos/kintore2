@@ -1,50 +1,90 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+同期影響レポート
+バージョン変更: 1.0.0 (新規作成)
+変更された原則: 全て（新規作成）
+追加されたセクション: 全て（新規作成）
+削除されたセクション: なし
+更新が必要なテンプレート: ✅ 全て更新済み
+フォローアップTODO: なし
+-->
 
-## Core Principles
+# キントレ プロジェクト憲法
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+## 基本原則
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### I. 効率的なワークアウト管理
+筋力トレーニングのワークアウトプランを効率的に管理し、ユーザーの目標達成をサポートする。
+- トレーニング記録は正確で一貫性のある形式で保存されなければならない
+- ユーザーの進捗を可視化し、モチベーション維持に貢献する
+- カスタマイズ可能なワークアウトプランを提供する
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. ユーザビリティ重視
+シンプルで直感的なインターフェースを通じて、すべてのユーザーが簡単に利用できる環境を提供する。
+- 最小限のステップでトレーニング記録を入力できる
+- 明確なナビゲーションとフィードバックを提供する
+- アクセシビリティガイドラインに準拠する
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### III. データ駆動の意思決定
+ユーザーのトレーニングデータを分析し、効果的なワークアウト計画の立案をサポートする。
+- トレーニング履歴の分析と可視化
+- パフォーマンス指標の追跡と目標設定
+- データに基づいた改善提案の提供
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### IV. セキュリティとプライバシー
+ユーザーの個人情報とトレーニングデータを適切に保護する。
+- 個人情報の暗号化と安全な保管
+- アクセス制御とデータ保護の徹底
+- プライバシーポリシーの遵守
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### V. 継続的な改善
+ユーザーフィードバックとデータ分析に基づき、サービスを継続的に改善する。
+- 定期的なユーザーフィードバックの収集と分析
+- パフォーマンス最適化とバグ修正の迅速な実施
+- 新機能の計画的な導入
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## 開発基準
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### コード品質
+- テストカバレッジ80%以上を維持
+- コードレビューの必須化
+- 静的解析ツールの活用
+- パフォーマンス指標の定期的なモニタリング
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### ドキュメンテーション
+- API仕様書の常時更新
+- ユーザーガイドの整備
+- 開発者ドキュメントの維持
+- 変更履歴の明確な記録
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+## 開発ワークフロー
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+### プロセス
+1. 機能要件の明確化とレビュー
+2. 設計ドキュメントの作成
+3. テストケースの作成
+4. 実装とコードレビュー
+5. テスト実行と品質確認
+6. デプロイと監視
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+### レビュー基準
+- セキュリティ要件の遵守
+- パフォーマンス基準の達成
+- コーディング規約への準拠
+- ドキュメントの完備
+
+## ガバナンス
+
+本憲法はプロジェクトの最高指針として機能し、すべての開発活動はここに定められた原則に従わなければならない。
+
+### 改定ルール
+1. 改定提案は全チームメンバーが行うことができる
+2. 改定には技術リーダーの承認が必要
+3. 改定履歴は明確に記録し、影響範囲を文書化する
+4. 重要な改定には移行計画の策定が必要
+
+### コンプライアンス確認
+- すべてのプルリクエストは本憲法への準拠を確認する
+- 四半期ごとのコンプライアンス監査を実施
+- 違反が発見された場合は即時是正する
+
+**バージョン**: 1.0.0 | **制定日**: 2025-11-02 | **最終改定日**: 2025-11-02
