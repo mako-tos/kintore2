@@ -114,6 +114,36 @@
 - **[エンティティ1]**: [何を表すか、実装を含まない主要な属性]
 - **[エンティティ2]**: [何を表すか、他のエンティティとの関係]
 
+## データ型 (Data Types) ※必須
+
+このセクションは、実装とテストで使用する具体的なデータ型定義（single source of truth）への入り口です。必ず `specs/[###-feature]/data-model.md` を作成し、以下の項目を記載してください。
+
+- ファイル: `specs/[###-feature]/data-model.md`
+- 各エンティティについて表形式またはJSON Schema形式で以下を定義すること:
+  - フィールド名
+  - 型 (例: string, integer, boolean, UUID, ISO8601 datetime, object, array)
+  - 必須/任意
+  - 制約（最大長、正規表現、ユニークキー等）
+  - サンプル値（例: JSONスニペット）
+  - 関連エンティティ/リレーション（外部キー等）
+
+例（簡易JSONスニペット）:
+
+```json
+{
+  "User": {
+    "id": "uuid",
+    "name": "string",
+    "email": "string",
+    "created_at": "string (ISO8601)"
+  }
+}
+```
+
+自動化/運用上の推奨:
+- 可能であればOpenAPI/JSON Schema/TypeScript型/protobufのいずれかの機械判読フォーマットを併記しておくこと（コード生成と契約テストに利用可能）。
+- スキーマ変更は必ず `data-model.md` の更新 + マイグレーションタスクをプルリクでセットにすること。
+
 ## 成功基準 *(必須)*
 
 <!--
