@@ -1,0 +1,23 @@
+{
+  "name": "kintore2",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+  "test": "npm run build && node dist/test/run-tests.js",
+    "lint": "eslint src --ext .ts --max-warnings=0",
+    "contract-test": "npm run build && node dist/test/contract-tests.js",
+    "generate-types": "node tools/generate-types.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@types/node": "^20.0.0",
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
+    "json-schema-to-typescript": "^10.1.4"
+  }
+}

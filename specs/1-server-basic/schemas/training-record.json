@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TrainingRecord",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "format": "uuid" },
+    "trainingMenuId": { "type": "string", "format": "uuid" },
+    "trainingAt": { "type": "string", "format": "date-time" },
+    "count": { "type": "number", "minimum": 1 },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "required": ["id","trainingMenuId","trainingAt","count","createdAt"]
+}

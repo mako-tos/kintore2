@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ServiceStatus",
+  "type": "object",
+  "properties": {
+    "status": { "type": "string", "enum": ["ok","degraded","down"] },
+    "uptime": { "type": "number", "minimum": 0 },
+    "version": { "type": "string" }
+  },
+  "required": ["status","uptime","version"]
+}
