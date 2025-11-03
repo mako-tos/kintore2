@@ -18,35 +18,33 @@ const mockSupabaseResponse = {
   count: 1
 };
 
-// Supabaseクライアントのモック
-jest.mock('@/lib/supabase', () => ({
-  supabase: {
-    from: () => ({
-      select: () => ({
-        eq: () => ({
-          order: () => ({
-            range: () => Promise.resolve(mockSupabaseResponse)
+// Supabaseクライアントのモック（チェーン可能なビルダーを返す）
+jest.mock('@/lib/supabase', () => {
+  const builder: any = {
+    select: (..._args: any[]) => builder,
+    eq: (..._args: any[]) => builder,
+    gte: (..._args: any[]) => builder,
+    lte: (..._args: any[]) => builder,
+    order: (..._args: any[]) => builder,
+    range: (_from: number, _to: number) => Promise.resolve(mockSupabaseResponse)
+  };
+
+  return {
+    supabase: {
+      from: () => ({
+        select: (...args: any[]) => builder,
+        insert: () => ({
+          select: () => ({
+            single: () => Promise.resolve({ data: mockSupabaseResponse.data[0], error: null })
           })
         }),
-        gte: () => ({
-          lte: () => ({
-            order: () => ({
-              range: () => Promise.resolve(mockSupabaseResponse)
-            })
-          })
+        delete: () => ({
+          eq: () => Promise.resolve({ error: null })
         })
-      }),
-      insert: () => ({
-        select: () => ({
-          single: () => Promise.resolve({ data: mockSupabaseResponse.data[0], error: null })
-        })
-      }),
-      delete: () => ({
-        eq: () => Promise.resolve({ error: null })
       })
-    })
-  }
-}));
+    }
+  };
+});
 
 describe('TrainingRecordRepository', () => {
   let repository: TrainingRecordRepository;
