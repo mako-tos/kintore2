@@ -1,0 +1,32 @@
+/* Reset & Base */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 1.5rem 0 1rem;
+  line-height: 1.4;
+}
+
+/* Pure.css Customizations */
+.pure-menu {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.pure-menu-link {
+  color: #333;
+}

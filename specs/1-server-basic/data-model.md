@@ -30,6 +30,7 @@
 | name | string | ✓ | maxLength: 20 | トレーニングメニュー名 | "スクワット" |
 | status | number | ✓ | enum: [0,1] | 0:有効, 1:無効 | 0 |
 | createdAt | string (ISO8601) | ✓ | format: date-time | 作成日時 | "2025-11-02T12:34:56Z" |
+| updatedAt | string (ISO8601) | ✓ | format: date-time | 更新日時 | "2025-11-02T12:34:56Z" |
 
 ---
 
@@ -81,9 +82,10 @@
     "id": { "type": "string", "format": "uuid" },
     "name": { "type": "string", "maxLength": 20 },
     "status": { "type": "number", "enum": [0,1] },
-    "createdAt": { "type": "string", "format": "date-time" }
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
   },
-  "required": ["id","name","status","createdAt"]
+  "required": ["id","name","status","createdAt", "updatedAt"]
 }
 ```
 

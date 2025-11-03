@@ -36,6 +36,76 @@
 - シークレットのローテーションポリシーをドキュメント化する
 - Netlifyの環境変数およびアクセス権を適切に管理
 
+## データソースへのCRUD
+
+### データアクセスパターン
+
+#### トレーニングメニュー
+- 全件取得（status=0の有効なメニューのみ）
+- キャッシュ戦略：30分のTTLでメモリキャッシュ
+- ソート順：name ASC
+
+#### トレーニング記録
+- メニューIDによるフィルタリング
+- 期間指定（trainingAt）によるフィルタリング
+- ページネーション：50件/ページ
+- ソート順：trainingAt DESC
+
+#### パフォーマンス最適化
+- N+1問題の回避：トレーニング記録取得時にメニュー情報をJOINして取得
+- インデックス：
+  - TrainingMenu: id, status
+  - TrainingRecord: id, trainingMenuId, trainingAt
+
+#### エラーハンドリング
+- 存在しないメニューID指定時：404 Not Found
+- 無効なページネーションパラメータ：400 Bad Request
+
+### データ作成パターン
+
+#### トレーニングメニュー
+- name のみ指定
+- idは自動採番
+- statusは0固定
+- createdAt, updatedAtはシステム日時を設定
+
+#### トレーニング記録
+- trainingMenuId, trainingAt, count を指定
+- trainingMenuId はTrainingMenuから(status=0)のidを参照する
+- idは自動採番
+- createdAtはシステム日時を設定
+
+#### エラーハンドリング
+- データ不整合の場合：400 Bad Request エラー原因をメッセージで返す
+
+### データ変更パターン
+
+#### トレーニングメニュー
+- idが一致したものを更新
+- name, statusは指定可能
+- createdAt は絶対に変更しない
+- updatedAtはシステム日時を設定
+
+#### トレーニング記録
+変更はできない
+
+#### エラーハンドリング
+- データ不整合の場合：400 Bad Request エラー原因をメッセージで返す
+
+### データ削除パターン
+
+#### トレーニングメニュー
+- idが一致したものを更新
+- statusを1に変える
+- name, createdAt は変更しない
+- updatedAtはシステム日時を設定
+
+#### トレーニング記録
+指定されたidに一致するものを物理削除する
+
+#### エラーハンドリング
+- データ不整合の場合：400 Bad Request エラー原因をメッセージで返す
+
 ## パフォーマンス計測と監視
 
 - RUM(Real User Monitoring)を導入してFCP等を計測
