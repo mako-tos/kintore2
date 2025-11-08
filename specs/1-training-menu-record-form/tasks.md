@@ -59,9 +59,11 @@
 - [ ] T009 [US1] クライアントバリデーション実装 src/components/TrainingMenuForm.tsx（必須・20文字制限）
 - [ ] T010 [US1] 重複チェックロジック実装 src/components/TrainingMenuForm.tsx（API利用）
 - [ ] T011 [US1] メニュー登録ページ作成 src/pages/training-menus/new.tsx
+- [ ] T011A [US1] メニュー一覧ページ作成 index.tsx (登録成功後の遷移先)
 - [ ] T012 [US1] フォーム送信ハンドラ実装 src/components/TrainingMenuForm.tsx（POST /api/training-menus）
 - [ ] T013 [US1] 登録成功時の一覧リダイレクト src/components/TrainingMenuForm.tsx
 - [ ] T014 [US1] エラー表示連携 src/components/TrainingMenuForm.tsx（ErrorMessage利用）
+- [ ] T014A [US1] メニュー登録フォームユニットテスト src/components/tests/TrainingMenuForm.test.tsx
 
 **完了チェックリスト**:
 - [ ] 必須項目が全て表示される
@@ -81,25 +83,30 @@
 - スタート複数回→回数増加
 - ストップ→タイマー停止
 - メニュー変更→自動保存・ログ更新
-- 当日記録がログ表示に反映
+- 当日記録ログに反映
 
 ### タスク
 - [ ] T015 [US2] 記録フォーム状態管理フック作成 src/hooks/useTrainingRecordForm.ts（menuId, count, timer, isRunning）
 - [ ] T016 [US2] タイマー処理フック作成 src/hooks/useTimer.ts（開始・停止・リセット・経過時間）
 - [ ] T017 [US2] 記録フォームUI作成 src/components/TrainingRecordForm.tsx（メニュー選択・タイマー・回数・スタート/ストップボタン）
+- [ ] T017A [US2] 当日日付の固定表示追加 src/components/TrainingRecordForm.tsx
 - [ ] T018 [US2] スタートボタン処理実装 src/components/TrainingRecordForm.tsx（回数増加・メニュー非活性・ストップ活性）
 - [ ] T019 [US2] ストップボタン処理実装 src/components/TrainingRecordForm.tsx（タイマー停止・メニュー/スタート活性・ストップ非活性）
 - [ ] T020 [US2] メニュー変更時の自動保存処理 src/components/TrainingRecordForm.tsx（count>0なら保存・状態リセット）
-- [ ] T021 [US2] 当日記録ログ表示コンポーネント作成 src/components/TrainingRecordLog.tsx
+- [ ] T021 [US2] 当日記録ログコンポーネント作成 src/components/TrainingRecordLog.tsx
+- [ ] T021A 当日記録の初期取得処理追加 src/components/TrainingRecordLog.tsx
 - [ ] T022 [US2] 記録登録ページ作成 src/pages/training-records/new.tsx
 - [ ] T023 [US2] API自動保存処理実装 src/components/TrainingRecordForm.tsx（POST /api/training-records）
 - [ ] T024 [US2] 保存失敗時のエラー処理実装 src/components/TrainingRecordForm.tsx
+- [ ] T024A [US2] 記録フォームタイマー挙動テスト src/components/tests/TrainingRecordForm.timer.test.tsx
+- [ ] T024B [US2] 存在しないメニューIDエラー処理 (404受領時UI表示) src/components/TrainingRecordForm.tsx
 
 **完了チェックリスト**:
 - [ ] タイマーが正しく開始/停止
 - [ ] スタートごとに回数増加
 - [ ] メニュー変更で自動保存
 - [ ] ログに当日記録が表示
+- [ ] 同一メニューが当日記録にある場合は回数を加算する
 - [ ] エラーは適切に処理
 
 ---
@@ -111,9 +118,13 @@
 ### タスク
 - [ ] T025 [P] Pure.cssによるフォームデザイン調整
 - [ ] T026 [P] API呼び出し最適化（3秒以内のパフォーマンス目標）
+- [ ] T026A メニュー登録の往復遅延計測スクリプト追加 scripts/perf/menu-registration.ts
+- [ ] T026B パフォーマンス測定スクリプト（記録自動保存遅延） scripts/perf/record-autosave.ts
 - [ ] T027 API呼び出し時のローディング表示追加（両フォーム）
 - [ ] T028 [P] 外部サービスへのエラーログ送信実装（plan.md参照）
 - [ ] T029 PC/スマホ両対応のクロスブラウザテスト
+- [ ] T029A E2E: メニュー登録～記録保存シナリオ tests/e2e/record-flow.spec.ts
+- [ ] T029B UXヒューリスティック評価シート作成 docs/ux/menu-record-heuristics.md
 
 ---
 
