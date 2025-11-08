@@ -1,202 +1,198 @@
-# Implementation Tasks: トレーニングメニュー登録画面とトレーニング記録登録画面
+# 実装タスク: トレーニングメニュー登録画面とトレーニング記録登録画面
 
-**Feature**: 1-training-menu-record-form
-**Created**: 2025-11-07
-**Spec**: [spec.md](./spec.md)
-**Plan**: [plan.md](./plan.md)
+**機能**: 1-training-menu-record-form
+**作成日**: 2025-11-07
+**仕様書**: [spec.md](./spec.md)
+**計画**: [plan.md](./plan.md)
 
-## Overview
+## 概要
 
-This document breaks down the implementation into executable tasks organized by user story. Each phase represents an independently testable increment.
+このドキュメントはユーザーストーリーごとに実行可能なタスクを整理しています。各フェーズは独立してテスト可能な単位です。
 
-**Total Tasks**: 18
-**User Stories**: 2 (US1: メニュー登録, US2: 記録登録)
-**Parallel Opportunities**: 8 tasks can run in parallel within phases
+**総タスク数**: 29
+**ユーザーストーリー**: 2（US1: メニュー登録, US2: 記録登録）
+**並列実行可能タスク**: 8
 
-## Implementation Strategy
+## 実装戦略
 
-- **MVP Scope**: User Story 1 (メニュー登録) - delivers immediate value
-- **Incremental Delivery**: Each user story is independently testable
-- **Tech Stack**: Next.js, TypeScript, React, Pure.css, Supabase
-
----
-
-## Phase 1: Setup & Infrastructure
-
-**Goal**: Initialize project structure and shared components
-
-### Tasks
-
-- [ ] T001 Verify Supabase tables exist (training_menus, training_records per specs/1-server-basic/data-model.md)
-- [ ] T002 [P] Create shared types in src/types/form-validation.ts for validation errors
-- [ ] T003 [P] Create shared validation utilities in src/utils/validation.ts (name max 20 chars, required fields)
-- [ ] T004 [P] Create error display component in src/components/ErrorMessage.tsx with Pure.css styling
+- **MVP範囲**: ユーザーストーリー1（メニュー登録）で最小価値を提供
+- **段階的リリース**: 各ユーザーストーリーは独立してテスト可能
+- **技術スタック**: Next.js, TypeScript, React, Pure.css, Supabase
 
 ---
 
-## Phase 2: Foundational Components
+## フェーズ1: セットアップ・インフラ
 
-**Goal**: Build blocking prerequisites needed by all user stories
+**目的**: プロジェクト構造と共通部品の初期化
 
-### Tasks
-
-- [ ] T005 Create API client wrapper in src/lib/api-client.ts for error handling
-- [ ] T006 [P] Create loading state component in src/components/LoadingSpinner.tsx
-- [ ] T007 [P] Create success notification component in src/components/SuccessMessage.tsx
-
----
-
-## Phase 3: User Story 1 - トレーニングメニュー登録
-
-**Story Goal**: ユーザーは新しいトレーニングメニューを登録できる
-
-**Independent Test Criteria**:
-- メニュー名入力→登録ボタン押下→一覧に追加される
-- 空のメニュー名でエラー表示
-- 重複メニュー名でエラー表示
-- キャンセルボタンで一覧に戻る
-
-### Tasks
-
-- [ ] T008 [US1] Create menu form component in src/components/TrainingMenuForm.tsx with name input, submit/cancel buttons
-- [ ] T009 [US1] Implement client-side validation in src/components/TrainingMenuForm.tsx (required, max 20 chars)
-- [ ] T010 [US1] Add duplicate check logic in src/components/TrainingMenuForm.tsx using existing API
-- [ ] T011 [US1] Create menu registration page in src/pages/training-menus/new.tsx
-- [ ] T012 [US1] Implement form submission handler calling POST /api/training-menus in src/components/TrainingMenuForm.tsx
-- [ ] T013 [US1] Add success redirect to list page in src/components/TrainingMenuForm.tsx
-- [ ] T014 [US1] Add error display integration in src/components/TrainingMenuForm.tsx using ErrorMessage component
-
-**Completion Checklist**:
-- [ ] Form renders with all required fields
-- [ ] Validation triggers on submit
-- [ ] Duplicate names rejected
-- [ ] Success redirects to list
-- [ ] Errors display clearly
+### タスク
+- [ ] T001 Supabaseテーブルの存在確認（training_menus, training_records specs/1-server-basic/data-model.md参照）
+- [ ] T002 [P] バリデーションエラー用型定義作成 src/types/form-validation.ts
+- [ ] T003 [P] バリデーション共通ユーティリティ作成 src/utils/validation.ts（名前20文字制限・必須項目）
+- [ ] T004 [P] Pure.css対応のエラー表示コンポーネント作成 src/components/ErrorMessage.tsx
 
 ---
 
-## Phase 4: User Story 2 - トレーニング記録登録
+## フェーズ2: 基盤部品
 
-**Story Goal**: ユーザーは日々のトレーニングをタイマー付きで記録できる
+**目的**: 全ユーザーストーリーで必要な共通部品の作成
 
-**Independent Test Criteria**:
-- メニュー選択→スタートボタン→タイマー起動・回数1
-- スタートボタン複数回押下→回数増加
-- ストップボタン→タイマー停止
-- メニュー変更→自動保存・ログ表示更新
+### タスク
+- [ ] T005 APIクライアントラッパー作成 src/lib/api-client.ts（エラー処理）
+- [ ] T006 [P] ローディング表示コンポーネント作成 src/components/LoadingSpinner.tsx
+- [ ] T007 [P] 成功通知コンポーネント作成 src/components/SuccessMessage.tsx
+
+---
+
+## フェーズ3: ユーザーストーリー1 - メニュー登録
+
+**目的**: ユーザーが新しいトレーニングメニューを登録できる
+
+**独立テスト基準**:
+- メニュー名入力→登録ボタン→一覧追加
+- 空欄でエラー表示
+- 重複名でエラー表示
+- キャンセルで一覧に戻る
+
+### タスク
+- [ ] T008 [US1] メニュー登録フォームコンポーネント作成 src/components/TrainingMenuForm.tsx（名前入力・登録/キャンセルボタン）
+- [ ] T009 [US1] クライアントバリデーション実装 src/components/TrainingMenuForm.tsx（必須・20文字制限）
+- [ ] T010 [US1] 重複チェックロジック実装 src/components/TrainingMenuForm.tsx（API利用）
+- [ ] T011 [US1] メニュー登録ページ作成 src/pages/training-menus/new.tsx
+- [ ] T012 [US1] フォーム送信ハンドラ実装 src/components/TrainingMenuForm.tsx（POST /api/training-menus）
+- [ ] T013 [US1] 登録成功時の一覧リダイレクト src/components/TrainingMenuForm.tsx
+- [ ] T014 [US1] エラー表示連携 src/components/TrainingMenuForm.tsx（ErrorMessage利用）
+
+**完了チェックリスト**:
+- [ ] 必須項目が全て表示される
+- [ ] バリデーションが送信時に発火
+- [ ] 重複名は拒否される
+- [ ] 成功時は一覧に遷移
+- [ ] エラーは明確に表示
+
+---
+
+## フェーズ4: ユーザーストーリー2 - 記録登録
+
+**目的**: ユーザーがタイマー付きで日々のトレーニング記録を登録できる
+
+**独立テスト基準**:
+- メニュー選択→スタート→タイマー起動・回数1
+- スタート複数回→回数増加
+- ストップ→タイマー停止
+- メニュー変更→自動保存・ログ更新
 - 当日記録がログ表示に反映
 
-### Tasks
+### タスク
+- [ ] T015 [US2] 記録フォーム状態管理フック作成 src/hooks/useTrainingRecordForm.ts（menuId, count, timer, isRunning）
+- [ ] T016 [US2] タイマー処理フック作成 src/hooks/useTimer.ts（開始・停止・リセット・経過時間）
+- [ ] T017 [US2] 記録フォームUI作成 src/components/TrainingRecordForm.tsx（メニュー選択・タイマー・回数・スタート/ストップボタン）
+- [ ] T018 [US2] スタートボタン処理実装 src/components/TrainingRecordForm.tsx（回数増加・メニュー非活性・ストップ活性）
+- [ ] T019 [US2] ストップボタン処理実装 src/components/TrainingRecordForm.tsx（タイマー停止・メニュー/スタート活性・ストップ非活性）
+- [ ] T020 [US2] メニュー変更時の自動保存処理 src/components/TrainingRecordForm.tsx（count>0なら保存・状態リセット）
+- [ ] T021 [US2] 当日記録ログ表示コンポーネント作成 src/components/TrainingRecordLog.tsx
+- [ ] T022 [US2] 記録登録ページ作成 src/pages/training-records/new.tsx
+- [ ] T023 [US2] API自動保存処理実装 src/components/TrainingRecordForm.tsx（POST /api/training-records）
+- [ ] T024 [US2] 保存失敗時のエラー処理実装 src/components/TrainingRecordForm.tsx
 
-- [ ] T015 [US2] Create training record form state in src/hooks/useTrainingRecordForm.ts (menuId, count, timer, isRunning)
-- [ ] T016 [US2] Implement timer logic in src/hooks/useTimer.ts (start, stop, reset, elapsed time)
-- [ ] T017 [US2] Create record form UI in src/components/TrainingRecordForm.tsx (menu select, timer display, count display, start/stop buttons)
-- [ ] T018 [US2] Implement start button handler in src/components/TrainingRecordForm.tsx (increment count, disable menu, enable stop)
-- [ ] T019 [US2] Implement stop button handler in src/components/TrainingRecordForm.tsx (stop timer, enable menu/start, disable stop)
-- [ ] T020 [US2] Implement menu change handler in src/components/TrainingRecordForm.tsx (save if count>0, reset state)
-- [ ] T021 [US2] Create log display component in src/components/TrainingRecordLog.tsx showing today's records
-- [ ] T022 [US2] Create record registration page in src/pages/training-records/new.tsx
-- [ ] T023 [US2] Implement auto-save to API POST /api/training-records in src/components/TrainingRecordForm.tsx
-- [ ] T024 [US2] Add error handling for save failures in src/components/TrainingRecordForm.tsx
-
-**Completion Checklist**:
-- [ ] Timer starts/stops correctly
-- [ ] Count increments on each start
-- [ ] Menu change triggers auto-save
-- [ ] Log displays today's records
-- [ ] Errors handled gracefully
-
----
-
-## Phase 5: Polish & Cross-Cutting Concerns
-
-**Goal**: Finalize UI, performance, and error handling
-
-### Tasks
-
-- [ ] T025 [P] Add Pure.css styling refinements to all form components
-- [ ] T026 [P] Optimize API calls to meet 3-second performance target
-- [ ] T027 Add loading states during API calls in both form components
-- [ ] T028 [P] Add comprehensive error logging to external service per plan.md
-- [ ] T029 Test cross-browser compatibility (PC/mobile per spec.md)
+**完了チェックリスト**:
+- [ ] タイマーが正しく開始/停止
+- [ ] スタートごとに回数増加
+- [ ] メニュー変更で自動保存
+- [ ] ログに当日記録が表示
+- [ ] エラーは適切に処理
 
 ---
 
-## Dependencies & Execution Order
+## フェーズ5: 仕上げ・横断的対応
 
-### Story Dependencies
-- **US1** (メニュー登録): Independent - can start immediately after Phase 2
-- **US2** (記録登録): Depends on US1 (needs menu list API)
+**目的**: UI最終調整・パフォーマンス・エラー処理
 
-### Parallel Execution Opportunities
+### タスク
+- [ ] T025 [P] Pure.cssによるフォームデザイン調整
+- [ ] T026 [P] API呼び出し最適化（3秒以内のパフォーマンス目標）
+- [ ] T027 API呼び出し時のローディング表示追加（両フォーム）
+- [ ] T028 [P] 外部サービスへのエラーログ送信実装（plan.md参照）
+- [ ] T029 PC/スマホ両対応のクロスブラウザテスト
 
-**Phase 1** (all parallel after T001):
+---
+
+## 依存関係・実行順
+
+### ストーリー依存関係
+- **US1**（メニュー登録）: 独立 - フェーズ2完了後すぐ着手可能
+- **US2**（記録登録）: US1完了後着手（メニュー一覧API必要）
+
+### 並列実行例
+
+**フェーズ1**（T001完了後並列）:
 ```
 T001 → [T002, T003, T004]
 ```
 
-**Phase 2** (all parallel):
+**フェーズ2**（全並列）:
 ```
-[T006, T007] (T005 blocks nothing)
+[T006, T007]（T005は依存なし）
 ```
 
-**Phase 3** (US1):
+**フェーズ3**（US1）:
 ```
 T008 → T009 → T010 → T011 → [T012, T013, T014]
 ```
 
-**Phase 4** (US2):
+**フェーズ4**（US2）:
 ```
 [T015, T016] → T017 → [T018, T019, T020] → T021 → T022 → [T023, T024]
 ```
 
-**Phase 5**:
+**フェーズ5**:
 ```
 [T025, T026, T028] → T027 → T029
 ```
 
 ---
 
-## Testing Strategy
+## テスト戦略
 
-### Unit Tests (per plan.md)
-- Validation utilities (T003)
-- Timer hook (T016)
-- Form state management (T015)
+### ユニットテスト（plan.md参照）
+- バリデーションユーティリティ（T003）
+- タイマーフック（T016）
+- フォーム状態管理（T015）
 
-### Integration Tests (per plan.md)
-- API calls with Supabase (T012, T023)
-- Form submission flows (T008-T014, T017-T024)
+### 統合テスト（plan.md参照）
+- Supabase API連携（T012, T023）
+- フォーム送信フロー（T008-T014, T017-T024）
 
-### E2E Tests (per plan.md)
-- Full user journey for US1 (menu registration)
-- Full user journey for US2 (record with timer)
+### E2Eテスト（plan.md参照）
+- US1（メニュー登録）のユーザージャーニー
+- US2（タイマー付き記録登録）のユーザージャーニー
 
-### Performance Tests
-- Verify 3-second registration target (T026)
-
----
-
-## MVP Recommendation
-
-**Suggested MVP**: Complete Phase 1-3 (User Story 1 only)
-- Delivers core menu registration functionality
-- 14 tasks total
-- Can ship independently
-- User Story 2 can follow in next iteration
-
-**Benefits**:
-- Faster time to value
-- Reduced risk
-- User feedback on US1 before building US2
-- Clear incremental progress
+### パフォーマンステスト
+- 3秒以内の登録目標検証（T026）
 
 ---
 
-## Notes
+## MVP提案
 
-- All tasks include specific file paths for LLM execution
-- Each user story is independently testable
-- Dependencies clearly marked
-- Parallel opportunities identified for faster execution
-- No tests explicitly requested in spec.md, but plan.md mentions test types for reference
+**推奨MVP**: フェーズ1〜3（ユーザーストーリー1のみ）
+- メニュー登録機能を最速で提供
+- 14タスク
+- 独立リリース可能
+- US2は次フェーズで追加
+
+**メリット**:
+- 価値提供の高速化
+- リスク低減
+- US1のユーザーフィードバックを先に得られる
+- 段階的な進捗が明確
+
+---
+
+## 備考
+
+- すべてのタスクはファイルパス付きでLLM実行可能
+- 各ユーザーストーリーは独立してテスト可能
+- 依存関係明示
+- 並列実行可能タスクを明示
+- テストはspec.mdで明示されていないが、plan.mdの記載に従い参考として記載
+
