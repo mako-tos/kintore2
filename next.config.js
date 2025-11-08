@@ -1,12 +1,11 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === 'production';
 const nextConfig = {
-  // Next.js 14の新機能を段階的に有効化
+  // Next.js 14の実験的機能（必要時のみ有効化）
   experimental: {
     // serverActions: true,
-  },
-  // パフォーマンス目標に合わせて設定
-  experimental: {
-    optimizeCss: true, // CSSの最適化
+    // optimizeCss は 'critters' パッケージに依存するため、開発時は無効化
+    optimizeCss: isProd, // 本番ビルド時のみ有効化
   },
   poweredByHeader: false, // セキュリティのためX-Powered-Byヘッダーを無効化
   reactStrictMode: true,
