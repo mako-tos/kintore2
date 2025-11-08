@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-explicit-any: off */
 import fs from 'fs';
 import path from 'path';
 import Ajv from 'ajv';

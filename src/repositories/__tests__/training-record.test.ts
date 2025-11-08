@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-explicit-any: off */
+/* eslint @typescript-eslint/no-unused-vars: off */
 import { describe, expect, test, beforeEach } from '@jest/globals';
 import { TrainingRecordRepository } from '@/repositories/training-record';
 

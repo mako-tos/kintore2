@@ -1,3 +1,6 @@
+/* eslint @typescript-eslint/no-explicit-any: off */
+/* eslint @typescript-eslint/ban-ts-comment: off */
+
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';

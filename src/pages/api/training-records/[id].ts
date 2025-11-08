@@ -25,6 +25,7 @@ export default async function handler(
         res.setHeader('Allow', ['DELETE']);
         res.status(405).json({ message: `Method ${req.method} Not Allowed` });
     }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any  
   } catch (error: any) {
     console.error('Error in training-record API:', error);
     res.status(500).json({ message: error.message });

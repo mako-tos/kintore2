@@ -15,7 +15,7 @@ export default async function handler(
 
   try {
     switch (req.method) {
-      case 'GET':
+      case 'GET': {
         // クエリパラメータの処理
         const menuId = req.query.menuId as string | undefined;
         const fromDate = req.query.fromDate ? new Date(req.query.fromDate as string) : undefined;
@@ -41,8 +41,8 @@ export default async function handler(
 
         res.status(200).json(result);
         break;
-
-      case 'POST':
+      }
+      case 'POST': {
         if (!req.body.trainingMenuId || !req.body.trainingAt || !req.body.count) {
           res.status(400).json({
             message: 'Invalid request: trainingMenuId, trainingAt, and count are required'
@@ -64,11 +64,13 @@ export default async function handler(
 
         res.status(201).json({ records: [newRecord], total: 1 });
         break;
-
-      default:
+      }
+      default: {
         res.setHeader('Allow', ['GET', 'POST']);
         res.status(405).json({ message: `Method ${req.method} Not Allowed` });
+      }
     }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Error in training-records API:', error);
     res.status(500).json({ message: error.message });

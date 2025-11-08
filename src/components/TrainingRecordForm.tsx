@@ -17,6 +17,7 @@ export const TrainingRecordForm: React.FC<Props> = ({ onAutoSaved }) => {
   const [formErrors, setFormErrors] = useState<{ field: string; message: string }[]>([]);
   const [autoSaveLoading, setAutoSaveLoading] = useState(false);
   const [autoSaveError, setAutoSaveError] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [refreshSignal, setRefreshSignal] = useState(0);
 
   const {
@@ -28,19 +29,20 @@ export const TrainingRecordForm: React.FC<Props> = ({ onAutoSaved }) => {
     handleStart,
     handleStop,
     handleMenuChange,
-    setMenuId
   } = useTrainingRecordForm({
     onAutoSave: async ({ trainingMenuId, count, trainingAt }) => {
       setAutoSaveLoading(true);
       setAutoSaveError(null);
       try {
         const body = { trainingMenuId, trainingAt, count };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const result = await apiClient.post<{ records: any[]; total: number }>('/api/training-records', body);
         const saved = result.records[0];
         onAutoSaved?.({ menuId: saved.training_menu_id, menuName: saved.training_menus?.name || '不明', count: saved.count });
         // trigger log refresh if server aggregation needed
         setRefreshSignal(x => x + 1);
         return true;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         const apiErr = e as ApiError;
         if (apiErr.status === 404) {

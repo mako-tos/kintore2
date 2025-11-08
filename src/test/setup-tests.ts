@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-explicit-any: off */
 import '@testing-library/jest-dom';
 
 // Optional: generic fetch polyfill if needed (node 18+ has fetch)

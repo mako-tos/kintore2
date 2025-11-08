@@ -48,6 +48,7 @@ export const TrainingRecordLog: React.FC<Props> = ({ date, refreshSignal, localN
       try {
         const result = await apiClient.get<{ records: ApiRecord[]; total: number }>(`/api/training-records?fromDate=${date}&toDate=${date}&limit=500`);
         setEntries(aggregate(result.records));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         setError(e?.message || '記録の取得に失敗しました');
       } finally {

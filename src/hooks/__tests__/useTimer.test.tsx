@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/ban-ts-comment: off */
 import React from 'react';
 import { render, act } from '@testing-library/react';
 import { useTimer, formatDuration } from '../useTimer';

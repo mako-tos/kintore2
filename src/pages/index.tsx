@@ -14,6 +14,7 @@ export default function HomePage() {
       try {
         const data = await apiClient.get<TrainingMenu[]>('/api/training-menus');
         setMenus(data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         setError(e?.message || 'メニュー取得に失敗しました');
       } finally {

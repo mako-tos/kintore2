@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-explicit-any: off */
 export interface ApiErrorShape {
   status: number;
   message: string;

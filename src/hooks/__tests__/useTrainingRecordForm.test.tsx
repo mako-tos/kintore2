@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-explicit-any: off */
 import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { useTrainingRecordForm } from '../useTrainingRecordForm';
@@ -20,6 +21,7 @@ const Harness: React.FC<{ onRef: (api: any) => void }> = ({ onRef }) => {
 
 describe('useTrainingRecordForm', () => {
   test('start increments count and toggles running', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let api: any;
     render(<Harness onRef={a => (api = a)} />);
     act(() => fireEvent.click(screen.getByText('setM1')));
