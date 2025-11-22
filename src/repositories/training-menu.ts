@@ -1,5 +1,6 @@
-import { TrainingMenu } from '@/types/training-menu';
-import { supabase } from '@/lib/supabase';
+import { TrainingMenu } from "@/types/training-menu";
+import { supabase } from "@/lib/supabase";
+import { supabaseServer } from "@/lib/supabase-server";
 
 export class TrainingMenuRepository {
   private static instance: TrainingMenuRepository;
@@ -18,8 +19,7 @@ export class TrainingMenuRepository {
 
   private isCacheValid(): boolean {
     return (
-      this.cache.size > 0 &&
-      Date.now() - this.lastCacheUpdate < this.CACHE_TTL
+      this.cache.size > 0 && Date.now() - this.lastCacheUpdate < this.CACHE_TTL
     );
   }
 
@@ -29,10 +29,10 @@ export class TrainingMenuRepository {
     }
 
     const { data, error } = await supabase
-      .from('training_menus')
-      .select('*')
-      .eq('status', 0)
-      .order('name', { ascending: true });
+      .from("training_menus")
+      .select("*")
+      .eq("status", 0)
+      .order("name", { ascending: true });
 
     if (error) {
       throw new Error(`Failed to fetch training menus: ${error.message}`);
@@ -56,14 +56,14 @@ export class TrainingMenuRepository {
     }
 
     const { data, error } = await supabase
-      .from('training_menus')
-      .select('*')
-      .eq('id', id)
-      .eq('status', 0)
+      .from("training_menus")
+      .select("*")
+      .eq("id", id)
+      .eq("status", 0)
       .single();
 
     if (error) {
-      if (error.code === 'PGRST116') {
+      if (error.code === "PGRST116") {
         return null;
       }
       throw new Error(`Failed to fetch training menu: ${error.message}`);
@@ -77,8 +77,9 @@ export class TrainingMenuRepository {
   }
 
   async create(name: string): Promise<TrainingMenu> {
-    const { data, error } = await supabase
-      .from('training_menus')
+    // 書き込みはサービスロールクライアントで RLS を回避
+    const { data, error } = await supabaseServer
+      .from("training_menus")
       .insert([{ name, status: 0 }])
       .select()
       .single();
@@ -92,10 +93,10 @@ export class TrainingMenuRepository {
   }
 
   async update(id: string, name: string): Promise<TrainingMenu> {
-    const { data, error } = await supabase
-      .from('training_menus')
+    const { data, error } = await supabaseServer
+      .from("training_menus")
       .update({ name, updated_at: new Date().toISOString() })
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -108,10 +109,10 @@ export class TrainingMenuRepository {
   }
 
   async delete(id: string): Promise<void> {
-    const { error } = await supabase
-      .from('training_menus')
+    const { error } = await supabaseServer
+      .from("training_menus")
       .update({ status: 1, updated_at: new Date().toISOString() })
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
       throw new Error(`Failed to delete training menu: ${error.message}`);

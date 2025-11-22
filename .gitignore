@@ -22,3 +22,5 @@ out/*
 .env.production
 .env.test
 .env.example
+
+.password

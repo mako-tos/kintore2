@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { useTimer } from './useTimer';
+import { useMemo, useState } from "react";
+import { useTimer } from "./useTimer";
 
 /**
  * 記録登録フォーム用の状態管理フック。
@@ -12,7 +12,7 @@ import { useTimer } from './useTimer';
  *
  * 主なアクション:
  * - handleStart: メニュー選択済みかつ停止中なら、回数+1してタイマー開始
- * - handleStop: 動作中ならタイマー停止
+ * - handleStop: 動作中ならタイマー停止（仕様により停止時タイマーは自動リセット）
  * - handleMenuChange: メニュー切替。count>0 の場合は onAutoSave を呼び出し、成功時のみ切替・リセット
  *
  * onAutoSave の契約:
@@ -27,11 +27,16 @@ export interface RecordFormState {
 export interface UseTrainingRecordFormOptions {
   initialMenuId?: string;
   // return true if saved, false if failed
-  onAutoSave?: (payload: { trainingMenuId: string; count: number; trainingAt: string; elapsedMs: number }) => Promise<boolean> | boolean;
+  onAutoSave?: (payload: {
+    trainingMenuId: string;
+    count: number;
+    trainingAt: string;
+    elapsedMs: number;
+  }) => Promise<boolean> | boolean;
 }
 
 export function useTrainingRecordForm(opts: UseTrainingRecordFormOptions = {}) {
-  const [menuId, setMenuId] = useState(opts.initialMenuId ?? '');
+  const [menuId, setMenuId] = useState(opts.initialMenuId ?? "");
   const [count, setCount] = useState(0);
   const { elapsedMs, isRunning, start, stop, reset } = useTimer();
 
@@ -42,20 +47,29 @@ export function useTrainingRecordForm(opts: UseTrainingRecordFormOptions = {}) {
   const handleStart = () => {
     if (!menuId) return; // メニュー未選択時は何もしない
     if (!isRunning) {
-      setCount(c => c + 1);
+      setCount((c) => c + 1);
       start();
     }
   };
 
   const handleStop = () => {
-    if (isRunning) stop();
+    if (isRunning) {
+      // stop() 内でリセットされる
+      stop();
+    }
   };
 
   const handleMenuChange = async (nextId: string) => {
     if (nextId === menuId) return;
     // auto save if count > 0
     if (count > 0 && menuId) {
-      const ok = (await opts.onAutoSave?.({ trainingMenuId: menuId, count, trainingAt, elapsedMs })) ?? true;
+      const ok =
+        (await opts.onAutoSave?.({
+          trainingMenuId: menuId,
+          count,
+          trainingAt,
+          elapsedMs,
+        })) ?? true;
       if (!ok) {
         // 自動保存に失敗した場合は、状態を維持して切替を取りやめ
         return;

@@ -1,5 +1,6 @@
-import { TrainingRecord } from '@/types/training-record';
-import { supabase } from '@/lib/supabase';
+import { TrainingRecord } from "@/types/training-record";
+import { supabase } from "@/lib/supabase";
+import { supabaseServer } from "@/lib/supabase-server";
 
 export class TrainingRecordRepository {
   private static instance: TrainingRecordRepository;
@@ -20,48 +21,67 @@ export class TrainingRecordRepository {
     page?: number;
     limit?: number;
   }): Promise<{ records: TrainingRecord[]; total: number }> {
-    const {
-      menuId,
-      fromDate,
-      toDate,
-      page = 1,
-      limit = 50
-    } = options;
+    const { menuId, fromDate, toDate, page = 1, limit = 50 } = options;
 
     let query = supabase
-      .from('training_records')
-      .select('*, training_menus(name)', { count: 'exact' });
+      .from("training_records")
+      .select("*, training_menus(name)", { count: "exact" });
 
     if (menuId) {
-      query = query.eq('training_menu_id', menuId);
+      query = query.eq("training_menu_id", menuId);
     }
 
     if (fromDate) {
-      query = query.gte('training_at', fromDate.toISOString());
+      query = query.gte("training_at", fromDate.toISOString());
     }
 
     if (toDate) {
-      query = query.lte('training_at', toDate.toISOString());
+      query = query.lte("training_at", toDate.toISOString());
     }
 
     const from = (page - 1) * limit;
     const to = from + limit - 1;
 
     const { data, error, count } = await query
-      .order('training_at', { ascending: false })
+      .order("training_at", { ascending: false })
       .range(from, to);
 
     if (error) {
       throw new Error(`Failed to fetch training records: ${error.message}`);
     }
+    // count が null/undefined の場合は別クエリで再取得（リレーション含む select で count が返らないケースがある）
+    let totalCount = count ?? null;
+    if (totalCount === null) {
+      let countQuery = supabase
+        .from("training_records")
+        .select("id", { count: "exact", head: true });
 
-    if (!count) {
-      throw new Error('Failed to get total count');
+      if (menuId) {
+        countQuery = countQuery.eq("training_menu_id", menuId);
+      }
+      if (fromDate) {
+        countQuery = countQuery.gte("training_at", fromDate.toISOString());
+      }
+      if (toDate) {
+        countQuery = countQuery.lte("training_at", toDate.toISOString());
+      }
+
+      const { count: fallbackCount, error: countError } = await countQuery;
+      if (countError) {
+        // 失敗時は 0 件として扱う（致命的ではないためログのみ）
+        console.warn("Fallback count query failed:", countError.message);
+        totalCount = 0;
+      } else {
+        totalCount = fallbackCount ?? 0;
+      }
     }
 
+    if (totalCount === null) {
+      totalCount = 0;
+    }
     return {
       records: data,
-      total: count
+      total: totalCount,
     };
   }
 
@@ -70,14 +90,17 @@ export class TrainingRecordRepository {
     trainingAt: Date;
     count: number;
   }): Promise<TrainingRecord> {
-    const { data, error } = await supabase
-      .from('training_records')
-      .insert([{
-        training_menu_id: record.trainingMenuId,
-        training_at: record.trainingAt.toISOString(),
-        count: record.count
-      }])
-      .select('*, training_menus(name)')
+    // 書き込みはサービスロールクライアントで RLS を回避
+    const { data, error } = await supabaseServer
+      .from("training_records")
+      .insert([
+        {
+          training_menu_id: record.trainingMenuId,
+          training_at: record.trainingAt.toISOString(),
+          count: record.count,
+        },
+      ])
+      .select("*, training_menus(name)")
       .single();
 
     if (error) {
@@ -88,10 +111,11 @@ export class TrainingRecordRepository {
   }
 
   async delete(id: string): Promise<void> {
-    const { error } = await supabase
-      .from('training_records')
+    // 削除もサービスロールで実施
+    const { error } = await supabaseServer
+      .from("training_records")
       .delete()
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
       throw new Error(`Failed to delete training record: ${error.message}`);

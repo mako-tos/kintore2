@@ -1,9 +1,9 @@
 /* eslint @typescript-eslint/no-explicit-any: off */
 /* eslint @typescript-eslint/ban-ts-comment: off */
 
-import { render, act } from '@testing-library/react';
-import React from 'react';
-import { useTimer, formatDuration } from '../useTimer';
+import { render, act } from "@testing-library/react";
+import React from "react";
+import { useTimer, formatDuration } from "../useTimer";
 
 // Helper component to drive the hook
 const TimerHarness: React.FC<{ onRef: (api: any) => void }> = ({ onRef }) => {
@@ -14,7 +14,7 @@ const TimerHarness: React.FC<{ onRef: (api: any) => void }> = ({ onRef }) => {
   return null;
 };
 
-describe('useTimer', () => {
+describe("useTimer", () => {
   let rafCb: FrameRequestCallback | null = null;
   let now = 0;
 
@@ -33,7 +33,7 @@ describe('useTimer', () => {
     global.cancelAnimationFrame = () => {};
   });
 
-  test('start, advance time, stop, reset', () => {
+  test("start, advance time, stop (auto-reset)", () => {
     let api: any;
     render(React.createElement(TimerHarness, { onRef: (a: any) => (api = a) }));
 
@@ -51,14 +51,16 @@ describe('useTimer', () => {
 
     act(() => api.stop());
     expect(api.isRunning).toBe(false);
-
+    // 仕様変更: stop 時点で経過時間は 0 にリセットされる
+    expect(api.elapsedMs).toBe(0);
+    // reset は冪等
     act(() => api.reset());
     expect(api.elapsedMs).toBe(0);
   });
 
-  test('formatDuration mm:ss', () => {
-    expect(formatDuration(0)).toBe('00:00');
-    expect(formatDuration(59000)).toBe('00:59');
-    expect(formatDuration(61000)).toBe('01:01');
+  test("formatDuration mm:ss", () => {
+    expect(formatDuration(0)).toBe("00:00");
+    expect(formatDuration(59000)).toBe("00:59");
+    expect(formatDuration(61000)).toBe("01:01");
   });
 });

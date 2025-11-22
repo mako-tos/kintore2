@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 /**
  * 高精度な経過時間（ミリ秒）を提供するタイマーフック。
@@ -46,6 +46,10 @@ export function useTimer() {
   const stop = () => {
     if (!isRunning) return;
     setIsRunning(false);
+    // 仕様変更: ストップ時にタイマーをリセットする
+    setElapsedMs(0);
+    startAtRef.current = null;
+    if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
   };
 
   /**
@@ -66,7 +70,7 @@ export function useTimer() {
  */
 export function formatDuration(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000);
-  const mm = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-  const ss = String(totalSeconds % 60).padStart(2, '0');
+  const mm = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+  const ss = String(totalSeconds % 60).padStart(2, "0");
   return `${mm}:${ss}`;
 }

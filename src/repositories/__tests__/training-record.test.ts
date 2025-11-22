@@ -1,34 +1,35 @@
 /* eslint @typescript-eslint/no-explicit-any: off */
 /* eslint @typescript-eslint/no-unused-vars: off */
-import { describe, expect, test, beforeEach } from '@jest/globals';
-import { TrainingRecordRepository } from '@/repositories/training-record';
+import { describe, expect, test, beforeEach } from "@jest/globals";
+import { TrainingRecordRepository } from "@/repositories/training-record";
 
 const mockSupabaseResponse = {
   data: [
     {
-      id: '123e4567-e89b-12d3-a456-426614174001',
-      training_menu_id: '123e4567-e89b-12d3-a456-426614174000',
-      training_at: '2025-11-03T00:00:00Z',
+      id: "123e4567-e89b-12d3-a456-426614174001",
+      training_menu_id: "123e4567-e89b-12d3-a456-426614174000",
+      training_at: "2025-11-03T00:00:00Z",
       count: 10,
-      created_at: '2025-11-03T00:00:00Z',
+      created_at: "2025-11-03T00:00:00Z",
       training_menus: {
-        name: 'スクワット'
-      }
-    }
+        name: "スクワット",
+      },
+    },
   ],
   error: null,
-  count: 1
+  count: 1,
 };
 
 // Supabaseクライアントのモック（チェーン可能なビルダーを返す）
-jest.mock('@/lib/supabase', () => {
+jest.mock("@/lib/supabase", () => {
   const builder: any = {
     select: (..._args: any[]) => builder,
     eq: (..._args: any[]) => builder,
     gte: (..._args: any[]) => builder,
     lte: (..._args: any[]) => builder,
     order: (..._args: any[]) => builder,
-    range: (_from: number, _to: number) => Promise.resolve(mockSupabaseResponse)
+    range: (_from: number, _to: number) =>
+      Promise.resolve(mockSupabaseResponse),
   };
 
   return {
@@ -37,58 +38,101 @@ jest.mock('@/lib/supabase', () => {
         select: (...args: any[]) => builder,
         insert: () => ({
           select: () => ({
-            single: () => Promise.resolve({ data: mockSupabaseResponse.data[0], error: null })
-          })
+            single: () =>
+              Promise.resolve({
+                data: mockSupabaseResponse.data[0],
+                error: null,
+              }),
+          }),
         }),
         delete: () => ({
-          eq: () => Promise.resolve({ error: null })
-        })
-      })
-    }
+          eq: () => Promise.resolve({ error: null }),
+        }),
+      }),
+    },
   };
 });
 
-describe('TrainingRecordRepository', () => {
+describe("TrainingRecordRepository", () => {
   let repository: TrainingRecordRepository;
 
   beforeEach(() => {
     repository = TrainingRecordRepository.getInstance();
   });
 
-  describe('findAll', () => {
-    test('returns training records with pagination', async () => {
+  describe("findAll", () => {
+    test("returns training records with pagination", async () => {
       const result = await repository.findAll({});
       expect(result.records).toEqual(mockSupabaseResponse.data);
       expect(result.total).toBe(mockSupabaseResponse.count);
     });
 
-    test('returns filtered training records', async () => {
+    test("returns filtered training records", async () => {
       const result = await repository.findAll({
-        menuId: '123e4567-e89b-12d3-a456-426614174000',
-        fromDate: new Date('2025-11-01'),
-        toDate: new Date('2025-11-30'),
+        menuId: "123e4567-e89b-12d3-a456-426614174000",
+        fromDate: new Date("2025-11-01"),
+        toDate: new Date("2025-11-30"),
         page: 1,
-        limit: 50
+        limit: 50,
       });
       expect(result.records).toEqual(mockSupabaseResponse.data);
       expect(result.total).toBe(mockSupabaseResponse.count);
     });
+
+    test("returns empty result when no records", async () => {
+      const original = {
+        data: [...mockSupabaseResponse.data],
+        count: mockSupabaseResponse.count,
+      };
+      (mockSupabaseResponse as any).data = [];
+      (mockSupabaseResponse as any).count = 0;
+      const result = await repository.findAll({});
+      expect(result.records).toEqual([]);
+      expect(result.total).toBe(0);
+      // restore
+      (mockSupabaseResponse as any).data = original.data;
+      (mockSupabaseResponse as any).count = original.count;
+    });
   });
 
-  describe('create', () => {
-    test('creates a new training record', async () => {
+  describe("create", () => {
+    test("creates a new training record", async () => {
       const record = await repository.create({
-        trainingMenuId: '123e4567-e89b-12d3-a456-426614174000',
-        trainingAt: new Date('2025-11-03T00:00:00Z'),
-        count: 10
+        trainingMenuId: "123e4567-e89b-12d3-a456-426614174000",
+        trainingAt: new Date("2025-11-03T00:00:00Z"),
+        count: 10,
       });
       expect(record).toEqual(mockSupabaseResponse.data[0]);
     });
   });
 
-  describe('delete', () => {
-    test('deletes a training record', async () => {
-      await expect(repository.delete('123e4567-e89b-12d3-a456-426614174001')).resolves.not.toThrow();
+  describe("delete", () => {
+    test("deletes a training record", async () => {
+      await expect(
+        repository.delete("123e4567-e89b-12d3-a456-426614174001")
+      ).resolves.not.toThrow();
     });
   });
+});
+
+// supabaseServer（サービスロール用クライアント）もモック（create/delete 用）
+jest.mock("@/lib/supabase-server", () => {
+  return {
+    supabaseServer: {
+      from: () => ({
+        insert: () => ({
+          select: () => ({
+            single: () =>
+              Promise.resolve({
+                data: mockSupabaseResponse.data[0],
+                error: null,
+              }),
+          }),
+        }),
+        delete: () => ({
+          eq: () => Promise.resolve({ error: null }),
+        }),
+      }),
+    },
+  };
 });
