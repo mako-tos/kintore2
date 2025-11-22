@@ -1,11 +1,10 @@
-import { Html, Head, Main, NextScript } from 'next/document';
+import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
     <Html lang="ja">
       <Head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* Pure.css CDNの読み込み */}
         <link
           rel="stylesheet"
@@ -23,7 +22,7 @@ export default function Document() {
               h1, h2, h3, h4, h5, h6 {
                 font-family: "游明朝体", YuMincho, "游明朝", "Yu Mincho", serif;
               }
-            `
+            `,
           }}
         />
       </Head>
