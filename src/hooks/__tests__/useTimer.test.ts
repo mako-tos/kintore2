@@ -45,6 +45,7 @@ describe("useTimer", () => {
 
     // advance 1ms
     act(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       rafCb && rafCb(0 as any);
     });
     expect(api.elapsedMs).toBeGreaterThan(0);
