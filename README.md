@@ -8,6 +8,10 @@
 MVP 作成目的なので認証など必要なものを作成してません
 そのまま参考にしないでください
 
+## netlify について
+
+Netlify の production ビルドでは NODE_ENV=production となり、`npm install --production`が実行されるため devDependencies がインストールされません。TypeScript のビルドや型チェック（`npm run prebuild` の `generate-types` など）で型定義が必要なため、これらを dependencies に含める必要があります。
+
 ## supabase について
 
 DB に supbase を使用してます
