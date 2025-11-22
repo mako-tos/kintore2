@@ -5,7 +5,7 @@
   "scripts": {
     "prebuild": "npm run generate-types",
     "build": "next build",
-    "build:netlify": "npm install --omit=dev && npm run build",
+    "build:netlify": "rm -rf ./node_modules &&npm install --omit=dev && npm run build",
     "build:contract": "tsc -p tsconfig.testbuild.json",
     "typecheck": "tsc --noEmit",
     "test": "jest",
