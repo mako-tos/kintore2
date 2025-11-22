@@ -6,9 +6,6 @@ const nextConfig = {
     // serverActions: true,
     // optimizeCss は 'critters' パッケージに依存するため、開発時は無効化
     optimizeCss: isProd, // 本番ビルド時のみ有効化
-    useDeploymentId: true,
-    // Optionally, use with Server Actions
-    useDeploymentIdServerActions: true,
   },
   poweredByHeader: false, // セキュリティのためX-Powered-Byヘッダーを無効化
   reactStrictMode: true,
