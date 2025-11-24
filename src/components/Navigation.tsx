@@ -1,6 +1,6 @@
-import React from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 /**
  * ナビゲーションリンクの定義
@@ -12,10 +12,10 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: '/', label: 'ホーム', icon: '🏠' },
-  { href: '/calendar', label: 'カレンダー', icon: '📅' },
-  { href: '/training-menus/new', label: 'メニュー作成', icon: '➕' },
-  { href: '/training-records/new', label: '記録登録', icon: '✏️' },
+  { href: "/", label: "ホーム", icon: "🏠" },
+  { href: "/calendar", label: "カレンダー", icon: "📅" },
+  { href: "/training-menus/new", label: "メニュー作成", icon: "➕" },
+  { href: "/training-records/new", label: "記録登録", icon: "✏️" },
 ];
 
 interface NavigationProps {
@@ -39,7 +39,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onLinkClick }) => {
             <li key={item.href} className="app-nav-item">
               <Link
                 href={item.href}
-                className={`app-nav-link ${isActive ? 'active' : ''}`}
+                className={`app-nav-link ${isActive ? "active" : ""}`}
                 onClick={onLinkClick}
               >
                 <span className="app-nav-icon">{item.icon}</span>

@@ -1,0 +1,344 @@
+/* ========================================
+   カレンダー表示スタイル
+   ======================================== */
+
+.calendar-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* ========================================
+   カレンダーコンテナ
+   ======================================== */
+
+.calendar-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+/* ========================================
+   カレンダーヘッダー（年月表示 + ナビゲーション）
+   ======================================== */
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.calendar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+  flex: 1;
+}
+
+.calendar-nav-button {
+  background-color: #1f8dd6;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.calendar-nav-button:hover:not(:disabled) {
+  background-color: #1a7bc4;
+}
+
+.calendar-nav-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* ========================================
+   カレンダーテーブル
+   ======================================== */
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.calendar-weekday {
+  background-color: #f5f5f5;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #ddd;
+  font-size: 0.95rem;
+}
+
+/* ========================================
+   カレンダー日付セル
+   ======================================== */
+
+.calendar-day {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  height: 80px;
+  vertical-align: top;
+  background-color: white;
+  position: relative;
+}
+
+.calendar-day-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.calendar-day-number {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.calendar-day-star {
+  font-size: 1.2rem;
+  margin-top: 0.25rem;
+}
+
+/* 他月の日付（グレーアウト） */
+.calendar-day-other-month {
+  background-color: #f9f9f9;
+  color: #999;
+}
+
+.calendar-day-other-month .calendar-day-star {
+  display: none;
+}
+
+/* 今日 */
+.calendar-day-today {
+  background-color: #fff9e6;
+  border: 2px solid #ffa500;
+  font-weight: bold;
+}
+
+/* 記録がある日 */
+.calendar-day-has-records {
+  cursor: pointer;
+}
+
+.calendar-day-has-records:hover {
+  background-color: #f0f8ff;
+}
+
+/* 日曜日 */
+.calendar-day-sunday .calendar-day-number {
+  color: #d32f2f;
+}
+
+/* 土曜日 */
+.calendar-day-saturday .calendar-day-number {
+  color: #1976d2;
+}
+
+/* ========================================
+   ポップアップ（記録詳細）
+   ======================================== */
+
+.record-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 400;
+}
+
+.record-popup {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 500;
+}
+
+.record-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.record-popup-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.record-popup-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.record-popup-close:hover {
+  color: #333;
+}
+
+.record-popup-content {
+  padding: 1.5rem;
+}
+
+.record-popup-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.record-popup-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.record-popup-item:last-child {
+  border-bottom: none;
+}
+
+.record-popup-menu {
+  font-size: 1rem;
+  color: #333;
+  flex: 1;
+}
+
+.record-popup-count {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1f8dd6;
+}
+
+.record-popup-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ========================================
+   レスポンシブ対応
+   ======================================== */
+
+@media (max-width: 768px) {
+  .calendar-container {
+    padding: 1rem;
+  }
+
+  .calendar-title {
+    font-size: 1.25rem;
+  }
+
+  .calendar-nav-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .calendar-day {
+    height: 60px;
+    padding: 0.25rem;
+  }
+
+  .calendar-day-number {
+    font-size: 1rem;
+  }
+
+  .calendar-day-star {
+    font-size: 1rem;
+  }
+
+  .calendar-weekday {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-page {
+    padding: 0.5rem;
+  }
+
+  .calendar-container {
+    padding: 0.75rem;
+  }
+
+  .calendar-header {
+    gap: 0.5rem;
+  }
+
+  .calendar-title {
+    font-size: 1.1rem;
+  }
+
+  .calendar-nav-button {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .calendar-day {
+    height: 50px;
+    padding: 0.2rem;
+  }
+
+  .calendar-day-number {
+    font-size: 0.9rem;
+  }
+
+  .calendar-day-star {
+    font-size: 0.9rem;
+    margin-top: 0.1rem;
+  }
+
+  .calendar-weekday {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.75rem;
+  }
+
+  .record-popup {
+    width: 95%;
+  }
+
+  .record-popup-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .record-popup-content {
+    padding: 1rem;
+  }
+}

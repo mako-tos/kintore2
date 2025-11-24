@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Navigation from './Navigation';
+import React, { useState } from "react";
+import Navigation from "./Navigation";
 
 /**
  * アプリケーション共通ヘッダーコンポーネント。
