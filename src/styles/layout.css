@@ -1,0 +1,204 @@
+/* ========================================
+   共通レイアウトとナビゲーションスタイル
+   ======================================== */
+
+/* レイアウト全体 */
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* メインコンテンツエリア */
+.app-main {
+  flex: 1;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ========================================
+   ヘッダー
+   ======================================== */
+
+.app-header {
+  background-color: #1f8dd6;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* アプリケーションロゴ */
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.app-logo-icon {
+  font-size: 1.5rem;
+}
+
+.app-logo-text {
+  white-space: nowrap;
+}
+
+/* ========================================
+   ナビゲーション（共通）
+   ======================================== */
+
+.app-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.app-nav-item {
+  margin: 0;
+}
+
+.app-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.app-nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.app-nav-link.active {
+  background-color: rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+}
+
+.app-nav-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.app-nav-label {
+  font-size: 0.95rem;
+}
+
+/* ========================================
+   PC 表示用ナビゲーション
+   ======================================== */
+
+.app-nav-desktop {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .app-nav-desktop {
+    display: block;
+  }
+}
+
+/* ========================================
+   スマホ表示用ハンバーガーメニュー
+   ======================================== */
+
+.app-hamburger {
+  display: block;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.75rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  line-height: 1;
+}
+
+@media (min-width: 769px) {
+  .app-hamburger {
+    display: none;
+  }
+}
+
+.app-hamburger-icon {
+  display: block;
+}
+
+/* ドロワーオーバーレイ */
+.app-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+
+/* ドロワーメニュー */
+.app-menu-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 80%;
+  max-width: 300px;
+  background-color: #1f8dd6;
+  z-index: 300;
+  padding: 1rem;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+}
+
+.app-menu-drawer .app-nav-list {
+  flex-direction: column;
+  gap: 0;
+}
+
+.app-menu-drawer .app-nav-link {
+  padding: 1rem;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.app-menu-drawer .app-nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ========================================
+   レスポンシブ調整
+   ======================================== */
+
+@media (max-width: 480px) {
+  .app-main {
+    padding: 0.75rem;
+  }
+
+  .app-logo-text {
+    font-size: 1rem;
+  }
+
+  .app-nav-label {
+    font-size: 0.9rem;
+  }
+}
