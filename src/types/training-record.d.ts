@@ -2,7 +2,7 @@ export interface TrainingRecord {
   id: string;
   trainingMenuId: string;
   trainingAt: string;
-  count: number;
+  set: number;
   createdAt: string;
   [k: string]: unknown;
 }

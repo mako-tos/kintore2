@@ -23,7 +23,7 @@ export const RecordPopup: React.FC<RecordPopupProps> = ({
     }
   };
 
-  // 同一メニューを集計 (メニューID単位で count を合計)
+  // 同一メニューを集計 (メニューID単位で set を合計)
   const aggregated = React.useMemo(() => {
     const map = new Map<string, { id: string; name: string; total: number }>();
     for (const r of records) {
@@ -31,9 +31,9 @@ export const RecordPopup: React.FC<RecordPopupProps> = ({
       const existing = map.get(key);
       const name = r.training_menus?.name || "不明";
       if (existing) {
-        existing.total += r.count;
+        existing.total += r.set;
       } else {
-        map.set(key, { id: key, name, total: r.count });
+        map.set(key, { id: key, name, total: r.set });
       }
     }
     // 安定した表示のためメニュー名でソート
@@ -60,7 +60,7 @@ export const RecordPopup: React.FC<RecordPopupProps> = ({
             {aggregated.map((item) => (
               <li key={item.id} className="record-popup-item">
                 <span className="record-popup-menu">{item.name}</span>
-                <span className="record-popup-count">{item.total}回</span>
+                <span className="record-popup-count">{item.total}セット</span>
               </li>
             ))}
           </ul>

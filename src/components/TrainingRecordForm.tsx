@@ -14,7 +14,7 @@ interface Props {
   onAutoSaved?: (entry: {
     menuId: string;
     menuName: string;
-    count: number;
+    set: number;
   }) => void;
 }
 
@@ -31,7 +31,7 @@ export const TrainingRecordForm: React.FC<Props> = ({ onAutoSaved }) => {
 
   const {
     menuId,
-    count,
+    set,
     trainingAt,
     elapsedMs,
     isRunning,
@@ -39,11 +39,11 @@ export const TrainingRecordForm: React.FC<Props> = ({ onAutoSaved }) => {
     handleStop,
     handleMenuChange,
   } = useTrainingRecordForm({
-    onAutoSave: async ({ trainingMenuId, count, trainingAt }) => {
+    onAutoSave: async ({ trainingMenuId, set, trainingAt }) => {
       setAutoSaveLoading(true);
       setAutoSaveError(null);
       try {
-        const body = { trainingMenuId, trainingAt, count };
+        const body = { trainingMenuId, trainingAt, set };
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const result = await apiClient.post<{ records: any[]; total: number }>(
           "/api/training-records",
@@ -53,7 +53,7 @@ export const TrainingRecordForm: React.FC<Props> = ({ onAutoSaved }) => {
         onAutoSaved?.({
           menuId: saved.training_menu_id,
           menuName: saved.training_menus?.name || "不明",
-          count: saved.count,
+          set: saved.set,
         });
         // trigger log refresh if server aggregation needed
         setRefreshSignal((x) => x + 1);
@@ -130,8 +130,8 @@ export const TrainingRecordForm: React.FC<Props> = ({ onAutoSaved }) => {
           {formatDuration(elapsedMs)}
         </div>
 
-        <label style={{ marginTop: "0.75rem" }}>回数</label>
-        <div style={{ fontSize: "1.3rem", fontWeight: "bold" }}>{count}</div>
+        <label style={{ marginTop: "0.75rem" }}>セット数</label>
+        <div style={{ fontSize: "1.3rem", fontWeight: "bold" }}>{set}</div>
 
         <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
           <button

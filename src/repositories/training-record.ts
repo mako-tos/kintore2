@@ -88,7 +88,7 @@ export class TrainingRecordRepository {
   async create(record: {
     trainingMenuId: string;
     trainingAt: Date;
-    count: number;
+    set: number;
   }): Promise<TrainingRecord> {
     // 書き込みはサービスロールクライアントで RLS を回避
     const { data, error } = await supabaseServer
@@ -97,7 +97,7 @@ export class TrainingRecordRepository {
         {
           training_menu_id: record.trainingMenuId,
           training_at: record.trainingAt.toISOString(),
-          count: record.count,
+          set: record.set,
         },
       ])
       .select("*, training_menus(name)")

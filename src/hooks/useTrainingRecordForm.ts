@@ -6,22 +6,22 @@ import { useTimer } from "./useTimer";
  *
  * 提供する主な状態:
  * - menuId: 現在選択中のメニューID（未選択は空文字）
- * - count: 回数（スタートで1加算、スタート中はボタン無効 → ストップ後に再度スタート可能）
+ * - set: セット数（スタートで1加算、スタート中はボタン無効 → ストップ後に再度スタート可能）
  * - trainingAt: 当日（YYYY-MM-DD）固定
  * - elapsedMs, isRunning: タイマーの経過時間と動作状態（useTimer 由来）
  *
  * 主なアクション:
- * - handleStart: メニュー選択済みかつ停止中なら、回数+1してタイマー開始
+ * - handleStart: メニュー選択済みかつ停止中なら、セット数+1してタイマー開始
  * - handleStop: 動作中ならタイマー停止（仕様により停止時タイマーは自動リセット）
- * - handleMenuChange: メニュー切替。count>0 の場合は onAutoSave を呼び出し、成功時のみ切替・リセット
+ * - handleMenuChange: メニュー切替。set>0 の場合は onAutoSave を呼び出し、成功時のみ切替・リセット
  *
  * onAutoSave の契約:
- * - (trainingMenuId, count, trainingAt, elapsedMs) を引数に呼び出し
+ * - (trainingMenuId, set, trainingAt, elapsedMs) を引数に呼び出し
  * - 成功時 true、失敗時 false を返す（false の場合はメニュー切替を中断し、現在の状態を保持）
  */
 export interface RecordFormState {
   menuId: string;
-  count: number;
+  set: number;
 }
 
 export interface UseTrainingRecordFormOptions {
@@ -29,7 +29,7 @@ export interface UseTrainingRecordFormOptions {
   // return true if saved, false if failed
   onAutoSave?: (payload: {
     trainingMenuId: string;
-    count: number;
+    set: number;
     trainingAt: string;
     elapsedMs: number;
   }) => Promise<boolean> | boolean;
@@ -37,7 +37,7 @@ export interface UseTrainingRecordFormOptions {
 
 export function useTrainingRecordForm(opts: UseTrainingRecordFormOptions = {}) {
   const [menuId, setMenuId] = useState(opts.initialMenuId ?? "");
-  const [count, setCount] = useState(0);
+  const [set, setSet] = useState(0);
   const { elapsedMs, isRunning, start, stop, reset } = useTimer();
 
   // YYYY-MM-DD for today
@@ -47,7 +47,7 @@ export function useTrainingRecordForm(opts: UseTrainingRecordFormOptions = {}) {
   const handleStart = () => {
     if (!menuId) return; // メニュー未選択時は何もしない
     if (!isRunning) {
-      setCount((c) => c + 1);
+      setSet((c) => c + 1);
       start();
     }
   };
@@ -61,12 +61,12 @@ export function useTrainingRecordForm(opts: UseTrainingRecordFormOptions = {}) {
 
   const handleMenuChange = async (nextId: string) => {
     if (nextId === menuId) return;
-    // auto save if count > 0
-    if (count > 0 && menuId) {
+    // auto save if set > 0
+    if (set > 0 && menuId) {
       const ok =
         (await opts.onAutoSave?.({
           trainingMenuId: menuId,
-          count,
+          set,
           trainingAt,
           elapsedMs,
         })) ?? true;
@@ -75,16 +75,16 @@ export function useTrainingRecordForm(opts: UseTrainingRecordFormOptions = {}) {
         return;
       }
     }
-    // 保存成功（または保存不要）の場合、新メニューへ切替し、回数とタイマーをリセット
+    // 保存成功（または保存不要）の場合、新メニューへ切替し、セット数とタイマーをリセット
     setMenuId(nextId);
-    setCount(0);
+    setSet(0);
     reset();
   };
 
   return {
     // state
     menuId,
-    count,
+    set,
     trainingAt,
     elapsedMs,
     isRunning,

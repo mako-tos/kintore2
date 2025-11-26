@@ -9,7 +9,7 @@ const mockSupabaseResponse = {
       id: "123e4567-e89b-12d3-a456-426614174001",
       training_menu_id: "123e4567-e89b-12d3-a456-426614174000",
       training_at: "2025-11-03T00:00:00Z",
-      count: 10,
+      set: 10,
       created_at: "2025-11-03T00:00:00Z",
       training_menus: {
         name: "スクワット",
@@ -100,7 +100,7 @@ describe("TrainingRecordRepository", () => {
       const record = await repository.create({
         trainingMenuId: "123e4567-e89b-12d3-a456-426614174000",
         trainingAt: new Date("2025-11-03T00:00:00Z"),
-        count: 10,
+        set: 10,
       });
       expect(record).toEqual(mockSupabaseResponse.data[0]);
     });

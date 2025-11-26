@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { apiClient } from '../lib/api-client';
-import ErrorMessage from './ErrorMessage';
+import React, { useEffect, useState } from "react";
+import { apiClient } from "../lib/api-client";
+import ErrorMessage from "./ErrorMessage";
 
 interface MenuLogEntry {
   menuId: string;
   menuName: string;
-  count: number;
+  set: number;
 }
 
 interface ApiRecord {
   id: string;
   training_menu_id: string;
   training_at: string;
-  count: number;
+  set: number;
   training_menus?: { name: string };
 }
 
 interface Props {
   date: string; // YYYY-MM-DD
   refreshSignal?: number; // increment to force reload
-  localNewEntry?: { menuId: string; menuName: string; count: number } | null;
+  localNewEntry?: { menuId: string; menuName: string; set: number } | null;
 }
 
 // Aggregates records by menuId
@@ -28,15 +28,23 @@ function aggregate(records: ApiRecord[]): MenuLogEntry[] {
   for (const r of records) {
     const name = r.training_menus?.name || r.training_menu_id;
     if (map.has(r.training_menu_id)) {
-      map.get(r.training_menu_id)!.count += r.count;
+      map.get(r.training_menu_id)!.set += r.set;
     } else {
-      map.set(r.training_menu_id, { menuId: r.training_menu_id, menuName: name, count: r.count });
+      map.set(r.training_menu_id, {
+        menuId: r.training_menu_id,
+        menuName: name,
+        set: r.set,
+      });
     }
   }
   return Array.from(map.values());
 }
 
-export const TrainingRecordLog: React.FC<Props> = ({ date, refreshSignal, localNewEntry }) => {
+export const TrainingRecordLog: React.FC<Props> = ({
+  date,
+  refreshSignal,
+  localNewEntry,
+}) => {
   const [entries, setEntries] = useState<MenuLogEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -46,11 +54,14 @@ export const TrainingRecordLog: React.FC<Props> = ({ date, refreshSignal, localN
       setLoading(true);
       setError(null);
       try {
-        const result = await apiClient.get<{ records: ApiRecord[]; total: number }>(`/api/training-records?fromDate=${date}&toDate=${date}&limit=500`);
+        const result = await apiClient.get<{
+          records: ApiRecord[];
+          total: number;
+        }>(`/api/training-records?fromDate=${date}&toDate=${date}&limit=500`);
         setEntries(aggregate(result.records));
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
-        setError(e?.message || '記録の取得に失敗しました');
+        setError(e?.message || "記録の取得に失敗しました");
       } finally {
         setLoading(false);
       }
@@ -60,26 +71,40 @@ export const TrainingRecordLog: React.FC<Props> = ({ date, refreshSignal, localN
   // Merge local new entry (auto-save optimistic update)
   useEffect(() => {
     if (!localNewEntry) return;
-    setEntries(prev => {
-      const existing = prev.find(p => p.menuId === localNewEntry.menuId);
+    setEntries((prev) => {
+      const existing = prev.find((p) => p.menuId === localNewEntry.menuId);
       if (existing) {
-        return prev.map(p => p.menuId === localNewEntry.menuId ? { ...p, count: p.count + localNewEntry.count } : p);
+        return prev.map((p) =>
+          p.menuId === localNewEntry.menuId
+            ? { ...p, set: p.set + localNewEntry.set }
+            : p
+        );
       }
       return [...prev, localNewEntry];
     });
   }, [localNewEntry]);
 
   return (
-    <section style={{ marginTop: '1.5rem' }}>
+    <section style={{ marginTop: "1.5rem" }}>
       <h2>本日の記録</h2>
       {loading && <p>読み込み中...</p>}
-      {error && <ErrorMessage errors={[{ field: 'log', message: error }]} />}
-      {!loading && entries.length === 0 && !error && <p>まだ記録がありません。</p>}
-      <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
-        {entries.map(e => (
-          <li key={e.menuId} style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #eee', padding: '4px 0' }}>
+      {error && <ErrorMessage errors={[{ field: "log", message: error }]} />}
+      {!loading && entries.length === 0 && !error && (
+        <p>まだ記録がありません。</p>
+      )}
+      <ul style={{ listStyle: "none", paddingLeft: 0 }}>
+        {entries.map((e) => (
+          <li
+            key={e.menuId}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              borderBottom: "1px solid #eee",
+              padding: "4px 0",
+            }}
+          >
             <span>{e.menuName}</span>
-            <strong>{e.count} 回</strong>
+            <strong>{e.set} セット</strong>
           </li>
         ))}
       </ul>

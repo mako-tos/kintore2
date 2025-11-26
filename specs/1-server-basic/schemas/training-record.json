@@ -6,8 +6,8 @@
     "id": { "type": "string", "format": "uuid" },
     "trainingMenuId": { "type": "string", "format": "uuid" },
     "trainingAt": { "type": "string", "format": "date-time" },
-    "count": { "type": "number", "minimum": 1 },
+    "set": { "type": "number", "minimum": 1 },
     "createdAt": { "type": "string", "format": "date-time" }
   },
-  "required": ["id","trainingMenuId","trainingAt","count","createdAt"]
+  "required": ["id", "trainingMenuId", "trainingAt", "set", "createdAt"]
 }
