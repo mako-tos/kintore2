@@ -1,5 +1,4 @@
 import { TrainingMenu } from "@/types/training-menu";
-import { supabase } from "@/lib/supabase";
 import { supabaseServer } from "@/lib/supabase-server";
 
 export class TrainingMenuRepository {
@@ -23,14 +22,13 @@ export class TrainingMenuRepository {
     );
   }
 
-  async findAll(): Promise<TrainingMenu[]> {
-    if (this.isCacheValid()) {
-      return Array.from(this.cache.values());
-    }
-
-    const { data, error } = await supabase
+  async findAll(userId: string): Promise<TrainingMenu[]> {
+    // RLS で user_id フィルタリングされるため、キャッシュはユーザー別に管理すべきだが
+    // 簡易実装としてキャッシュを無効化（または userId 別キャッシュに拡張可能）
+    const { data, error } = await supabaseServer
       .from("training_menus")
       .select("*")
+      .eq("user_id", userId)
       .eq("status", 0)
       .order("name", { ascending: true });
 
@@ -38,27 +36,15 @@ export class TrainingMenuRepository {
       throw new Error(`Failed to fetch training menus: ${error.message}`);
     }
 
-    this.cache.clear();
-    data.forEach((menu: TrainingMenu) => {
-      this.cache.set(menu.id, menu);
-    });
-    this.lastCacheUpdate = Date.now();
-
     return data;
   }
 
-  async findById(id: string): Promise<TrainingMenu | null> {
-    if (this.isCacheValid()) {
-      const cached = this.cache.get(id);
-      if (cached && cached.status === 0) {
-        return cached;
-      }
-    }
-
-    const { data, error } = await supabase
+  async findById(id: string, userId: string): Promise<TrainingMenu | null> {
+    const { data, error } = await supabaseServer
       .from("training_menus")
       .select("*")
       .eq("id", id)
+      .eq("user_id", userId)
       .eq("status", 0)
       .single();
 
@@ -69,18 +55,14 @@ export class TrainingMenuRepository {
       throw new Error(`Failed to fetch training menu: ${error.message}`);
     }
 
-    if (data) {
-      this.cache.set(data.id, data);
-    }
-
     return data;
   }
 
-  async create(name: string): Promise<TrainingMenu> {
-    // 書き込みはサービスロールクライアントで RLS を回避
+  async create(name: string, userId: string): Promise<TrainingMenu> {
+    // サービスロールでも user_id を明示的に設定
     const { data, error } = await supabaseServer
       .from("training_menus")
-      .insert([{ name, status: 0 }])
+      .insert([{ name, status: 0, user_id: userId }])
       .select()
       .single();
 
@@ -88,15 +70,20 @@ export class TrainingMenuRepository {
       throw new Error(`Failed to create training menu: ${error.message}`);
     }
 
-    this.cache.set(data.id, data);
     return data;
   }
 
-  async update(id: string, name: string): Promise<TrainingMenu> {
+  async update(
+    id: string,
+    name: string,
+    userId: string
+  ): Promise<TrainingMenu> {
+    // RLS で自分のレコードのみ更新可能だが、念のため user_id も条件に含める
     const { data, error } = await supabaseServer
       .from("training_menus")
       .update({ name, updated_at: new Date().toISOString() })
       .eq("id", id)
+      .eq("user_id", userId)
       .select()
       .single();
 
@@ -104,20 +91,18 @@ export class TrainingMenuRepository {
       throw new Error(`Failed to update training menu: ${error.message}`);
     }
 
-    this.cache.set(data.id, data);
     return data;
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string, userId: string): Promise<void> {
     const { error } = await supabaseServer
       .from("training_menus")
       .update({ status: 1, updated_at: new Date().toISOString() })
-      .eq("id", id);
+      .eq("id", id)
+      .eq("user_id", userId);
 
     if (error) {
       throw new Error(`Failed to delete training menu: ${error.message}`);
     }
-
-    this.cache.delete(id);
   }
 }

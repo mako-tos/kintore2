@@ -4,6 +4,7 @@ import { formatDuration } from "../hooks/useTimer";
 import { apiClient, ApiError } from "../lib/api-client";
 import ErrorMessage from "./ErrorMessage";
 import LoadingSpinner from "./LoadingSpinner";
+import { useAuth } from "../contexts/AuthContext";
 
 interface TrainingMenuDto {
   id: string;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export const TrainingRecordForm: React.FC<Props> = ({ onAutoSaved }) => {
+  const { user, loading: authLoading } = useAuth();
   const [menus, setMenus] = useState<TrainingMenuDto[]>([]);
   const [menusLoading, setMenusLoading] = useState(true);
   const [formErrors, setFormErrors] = useState<
@@ -74,6 +76,13 @@ export const TrainingRecordForm: React.FC<Props> = ({ onAutoSaved }) => {
   });
 
   useEffect(() => {
+    // 認証が完了し、ユーザーが存在する場合のみメニュー取得
+    if (authLoading) return;
+    if (!user) {
+      setMenus([]);
+      setMenusLoading(false);
+      return;
+    }
     (async () => {
       try {
         const data = await apiClient.get<TrainingMenuDto[]>(
@@ -89,7 +98,7 @@ export const TrainingRecordForm: React.FC<Props> = ({ onAutoSaved }) => {
         setMenusLoading(false);
       }
     })();
-  }, []);
+  }, [authLoading, user]);
 
   // Validate selection before start
   const canStart = !!menuId && !isRunning;

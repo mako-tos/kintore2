@@ -30,12 +30,14 @@ function run() {
   const goodService = { status: "ok", uptime: 123, version: "1.0.0" };
   const goodMenu = {
     id: "550e8400-e29b-41d4-a716-446655440000",
+    userId: "550e8400-e29b-41d4-a716-446655440010",
     name: "スクワット",
     status: 0,
     createdAt: "2025-11-02T12:34:56Z",
   };
   const goodRecord = {
     id: "550e8400-e29b-41d4-a716-446655440001",
+    userId: "550e8400-e29b-41d4-a716-446655440010",
     trainingMenuId: "550e8400-e29b-41d4-a716-446655440000",
     trainingAt: "2025-11-02T10:00:00Z",
     set: 12,

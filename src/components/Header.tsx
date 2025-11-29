@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Navigation from "./Navigation";
+import AuthButton from "./AuthButton";
 
 /**
  * アプリケーション共通ヘッダーコンポーネント。
- * アプリ名とナビゲーションメニューを表示。
+ * アプリ名とナビゲーションメニュー、認証ボタンを表示。
  * レスポンシブ対応: PC では横並び、スマホではハンバーガーメニュー。
  */
 export const Header: React.FC = () => {
@@ -29,6 +30,7 @@ export const Header: React.FC = () => {
         {/* PC 表示用ナビゲーション */}
         <div className="app-nav-desktop">
           <Navigation />
+          <AuthButton />
         </div>
 
         {/* スマホ表示用ハンバーガーメニューボタン */}
@@ -48,6 +50,15 @@ export const Header: React.FC = () => {
           <div className="app-menu-overlay" onClick={closeMenu} />
           <div className="app-menu-drawer">
             <Navigation onLinkClick={closeMenu} />
+            <div
+              style={{
+                marginTop: "1rem",
+                paddingTop: "1rem",
+                borderTop: "1px solid #ddd",
+              }}
+            >
+              <AuthButton />
+            </div>
           </div>
         </>
       )}

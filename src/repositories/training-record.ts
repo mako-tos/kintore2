@@ -1,5 +1,4 @@
 import { TrainingRecord } from "@/types/training-record";
-import { supabase } from "@/lib/supabase";
 import { supabaseServer } from "@/lib/supabase-server";
 
 export class TrainingRecordRepository {
@@ -15,17 +14,19 @@ export class TrainingRecordRepository {
   }
 
   async findAll(options: {
+    userId: string;
     menuId?: string;
     fromDate?: Date;
     toDate?: Date;
     page?: number;
     limit?: number;
   }): Promise<{ records: TrainingRecord[]; total: number }> {
-    const { menuId, fromDate, toDate, page = 1, limit = 50 } = options;
+    const { userId, menuId, fromDate, toDate, page = 1, limit = 50 } = options;
 
-    let query = supabase
+    let query = supabaseServer
       .from("training_records")
-      .select("*, training_menus(name)", { count: "exact" });
+      .select("*, training_menus(name)", { count: "exact" })
+      .eq("user_id", userId);
 
     if (menuId) {
       query = query.eq("training_menu_id", menuId);
@@ -52,9 +53,10 @@ export class TrainingRecordRepository {
     // count が null/undefined の場合は別クエリで再取得（リレーション含む select で count が返らないケースがある）
     let totalCount = count ?? null;
     if (totalCount === null) {
-      let countQuery = supabase
+      let countQuery = supabaseServer
         .from("training_records")
-        .select("id", { count: "exact", head: true });
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", userId);
 
       if (menuId) {
         countQuery = countQuery.eq("training_menu_id", menuId);
@@ -89,8 +91,9 @@ export class TrainingRecordRepository {
     trainingMenuId: string;
     trainingAt: Date;
     set: number;
+    userId: string;
   }): Promise<TrainingRecord> {
-    // 書き込みはサービスロールクライアントで RLS を回避
+    // サービスロールでも user_id を明示的に設定
     const { data, error } = await supabaseServer
       .from("training_records")
       .insert([
@@ -98,6 +101,7 @@ export class TrainingRecordRepository {
           training_menu_id: record.trainingMenuId,
           training_at: record.trainingAt.toISOString(),
           set: record.set,
+          user_id: record.userId,
         },
       ])
       .select("*, training_menus(name)")
@@ -110,12 +114,13 @@ export class TrainingRecordRepository {
     return data;
   }
 
-  async delete(id: string): Promise<void> {
-    // 削除もサービスロールで実施
+  async delete(id: string, userId: string): Promise<void> {
+    // RLS で自分のレコードのみ削除可能だが、念のため user_id も条件に含める
     const { error } = await supabaseServer
       .from("training_records")
       .delete()
-      .eq("id", id);
+      .eq("id", id)
+      .eq("user_id", userId);
 
     if (error) {
       throw new Error(`Failed to delete training record: ${error.message}`);

@@ -28,6 +28,7 @@
 | フィールド |               型 | 必須 | 制約              | 説明                       | サンプル                               |
 | ---------- | ---------------: | :--: | ----------------- | -------------------------- | -------------------------------------- |
 | id         |    string (UUID) |  ✓   | format: uuid      | トレーニングメニュー識別子 | "550e8400-e29b-41d4-a716-446655440000" |
+| userId     |    string (UUID) |  ✓   | format: uuid      | ユーザー識別子             | "550e8400-e29b-41d4-a716-446655440010" |
 | name       |           string |  ✓   | maxLength: 20     | トレーニングメニュー名     | "スクワット"                           |
 | status     |           number |  ✓   | enum: [0,1]       | 0:有効, 1:無効             | 0                                      |
 | createdAt  | string (ISO8601) |  ✓   | format: date-time | 作成日時                   | "2025-11-02T12:34:56Z"                 |
@@ -40,6 +41,7 @@
 | フィールド     |               型 | 必須 | 制約              | 説明                       | サンプル                               |
 | -------------- | ---------------: | :--: | ----------------- | -------------------------- | -------------------------------------- |
 | id             |    string (UUID) |  ✓   | format: uuid      | トレーニングレコード識別子 | "550e8400-e29b-41d4-a716-446655440002" |
+| userId         |    string (UUID) |  ✓   | format: uuid      | ユーザー識別子             | "550e8400-e29b-41d4-a716-446655440010" |
 | trainingMenuId |    string (UUID) |  ✓   | format: uuid      | トレーニングメニュー識別子 | "550e8400-e29b-41d4-a716-446655440000" |
 | trainingAt     | string (ISO8601) |  ✓   | format: date-time | トレーニング実施日時       | "2025-11-02T10:00:00Z"                 |
 | set            |           number |  ✓   | minimum: 1        | 実施セット数               | 12                                     |
@@ -84,12 +86,13 @@
   "type": "object",
   "properties": {
     "id": { "type": "string", "format": "uuid" },
+    "userId": { "type": "string", "format": "uuid" },
     "name": { "type": "string", "maxLength": 20 },
     "status": { "type": "number", "enum": [0, 1] },
     "createdAt": { "type": "string", "format": "date-time" },
     "updatedAt": { "type": "string", "format": "date-time" }
   },
-  "required": ["id", "name", "status", "createdAt", "updatedAt"]
+  "required": ["id", "userId", "name", "status", "createdAt", "updatedAt"]
 }
 ```
 
@@ -102,12 +105,20 @@
   "type": "object",
   "properties": {
     "id": { "type": "string", "format": "uuid" },
+    "userId": { "type": "string", "format": "uuid" },
     "trainingMenuId": { "type": "string", "format": "uuid" },
     "trainingAt": { "type": "string", "format": "date-time" },
-    "count": { "type": "number", "minimum": 1 },
+    "set": { "type": "number", "minimum": 1 },
     "createdAt": { "type": "string", "format": "date-time" }
   },
-  "required": ["id", "trainingMenuId", "trainingAt", "count", "createdAt"]
+  "required": [
+    "id",
+    "userId",
+    "trainingMenuId",
+    "trainingAt",
+    "set",
+    "createdAt"
+  ]
 }
 ```
 

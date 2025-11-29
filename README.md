@@ -27,7 +27,6 @@ DB に supbase を使用してます
 
 - API Key 取得
   `Setting > API Keys > Legacy API Keys`を開き
-
   - `anon`
     `anon`の API KEY をコピーして `.env.development` に
     `NEXT_PUBLIC_SUPABASE_ANON_KEY=${コピーしたAPI KEY}`
@@ -42,3 +41,35 @@ DB に supbase を使用してます
   `Setting > DATA API`を開き `Project URL`をコピーして `.env.development` に
   `NEXT_PUBLIC_SUPABASE_URL=${コピーしたURL}`
   行を追加
+
+### Google OAuth Client ID / Secret の取得
+
+1. [Google Cloud Console](https://console.cloud.google.com/) へ移動
+2. プロジェクトの作成
+3. https://console.cloud.google.com/auth/overview?project=<user_google_project_id> へ移動し作成
+   Scopes は `email`, `profile`, `openid`
+4. APIs & Services → Credentials → Create Credentials → OAuth client ID へ移動
+5. 以下の設定をする
+
+```
+Application type: Web application
+Name: 任意 (例: Supabase OAuth)
+Authorized JavaScript origins:
+`http://localhost:3000` (ローカル)
+`https://<your-prod-domain>` (本番)
+`<NEXT_PUBLIC_SUPABASE_URL>`
+Authorized redirect URIs:
+<NEXT_PUBLIC_SUPABASE_URL>/auth/v1/callback
+```
+
+6. Client IDと Client Secretが表示されるのでコピー
+7. 6でコピーしたClient IDと Client SecretをSupabaseにコピーする
+
+- Authentication > Sign In / Providersを開く
+- Auth ProvidersからGoogleをクリック
+- Client IDと Client Secretを張り付ける
+
+8. SupabaseのURL設定を更新する
+
+- Authentication > URL Configuration を開く
+- Site URLを`http://localhost:3000`更新

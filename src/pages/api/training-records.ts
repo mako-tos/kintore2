@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { TrainingRecord } from "@/types/training-record";
 import { TrainingRecordRepository } from "@/repositories/training-record";
 import { TrainingMenuRepository } from "@/repositories/training-menu";
+import { requireAuth } from "@/lib/auth-helpers";
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,6 +18,9 @@ export default async function handler(
   const menuRepository = TrainingMenuRepository.getInstance();
 
   try {
+    // 認証必須
+    const userId = await requireAuth(req);
+
     switch (req.method) {
       case "GET": {
         // クエリパラメータの処理
@@ -35,7 +39,7 @@ export default async function handler(
           : 50;
 
         if (menuId) {
-          const menu = await menuRepository.findById(menuId);
+          const menu = await menuRepository.findById(menuId, userId);
           if (!menu) {
             res.status(404).json({ message: "Training menu not found" });
             return;
@@ -43,6 +47,7 @@ export default async function handler(
         }
 
         const result = await repository.findAll({
+          userId,
           menuId,
           fromDate,
           toDate,
@@ -62,7 +67,10 @@ export default async function handler(
           return;
         }
 
-        const menu = await menuRepository.findById(req.body.trainingMenuId);
+        const menu = await menuRepository.findById(
+          req.body.trainingMenuId,
+          userId
+        );
         if (!menu) {
           res.status(404).json({ message: "Training menu not found" });
           return;
@@ -72,6 +80,7 @@ export default async function handler(
           trainingMenuId: req.body.trainingMenuId,
           trainingAt: new Date(req.body.trainingAt),
           set: parseInt(req.body.set, 10),
+          userId,
         });
 
         res.status(201).json({ records: [newRecord], total: 1 });
@@ -84,6 +93,10 @@ export default async function handler(
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
+    if (error.message === "Unauthorized") {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
     console.error("Error in training-records API:", error);
     res.status(500).json({ message: error.message });
   }

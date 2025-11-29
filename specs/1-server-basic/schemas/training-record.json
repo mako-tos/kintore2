@@ -4,10 +4,18 @@
   "type": "object",
   "properties": {
     "id": { "type": "string", "format": "uuid" },
+    "userId": { "type": "string", "format": "uuid" },
     "trainingMenuId": { "type": "string", "format": "uuid" },
     "trainingAt": { "type": "string", "format": "date-time" },
     "set": { "type": "number", "minimum": 1 },
     "createdAt": { "type": "string", "format": "date-time" }
   },
-  "required": ["id", "trainingMenuId", "trainingAt", "set", "createdAt"]
+  "required": [
+    "id",
+    "userId",
+    "trainingMenuId",
+    "trainingAt",
+    "set",
+    "createdAt"
+  ]
 }

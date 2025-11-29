@@ -4,9 +4,10 @@
   "type": "object",
   "properties": {
     "id": { "type": "string", "format": "uuid" },
+    "userId": { "type": "string", "format": "uuid" },
     "name": { "type": "string", "maxLength": 20 },
-    "status": { "type": "number", "enum": [0,1] },
+    "status": { "type": "number", "enum": [0, 1] },
     "createdAt": { "type": "string", "format": "date-time" }
   },
-  "required": ["id","name","status","createdAt"]
+  "required": ["id", "userId", "name", "status", "createdAt"]
 }
