@@ -59,7 +59,8 @@ Authorized JavaScript origins:
 `https://<your-prod-domain>` (本番)
 `<NEXT_PUBLIC_SUPABASE_URL>`
 Authorized redirect URIs:
-<NEXT_PUBLIC_SUPABASE_URL>/auth/v1/callback
+<NEXT_PUBLIC_SUPABASE_URL>/auth/v1/callback (ローカル)
+<NEXT_PUBLIC_SUPABASE_URL>/auth/v1/callback (本番)
 ```
 
 6. Client IDと Client Secretが表示されるのでコピー
@@ -73,3 +74,8 @@ Authorized redirect URIs:
 
 - Authentication > URL Configuration を開く
 - Site URLを`http://localhost:3000`更新
+
+9. OAuth Appsを設定する
+
+- Authentication > OAuth Appsを開く
+- New OAuth Appボタンを押し作成する
