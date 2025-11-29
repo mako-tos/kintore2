@@ -62,13 +62,14 @@ describe("TrainingRecordRepository", () => {
 
   describe("findAll", () => {
     test("returns training records with pagination", async () => {
-      const result = await repository.findAll({});
+      const result = await repository.findAll({ userId: "test-user-id" });
       expect(result.records).toEqual(mockSupabaseResponse.data);
       expect(result.total).toBe(mockSupabaseResponse.count);
     });
 
     test("returns filtered training records", async () => {
       const result = await repository.findAll({
+        userId: "test-user-id",
         menuId: "123e4567-e89b-12d3-a456-426614174000",
         fromDate: new Date("2025-11-01"),
         toDate: new Date("2025-11-30"),
@@ -86,7 +87,7 @@ describe("TrainingRecordRepository", () => {
       };
       (mockSupabaseResponse as any).data = [];
       (mockSupabaseResponse as any).count = 0;
-      const result = await repository.findAll({});
+      const result = await repository.findAll({ userId: "test-user-id" });
       expect(result.records).toEqual([]);
       expect(result.total).toBe(0);
       // restore
@@ -101,6 +102,7 @@ describe("TrainingRecordRepository", () => {
         trainingMenuId: "123e4567-e89b-12d3-a456-426614174000",
         trainingAt: new Date("2025-11-03T00:00:00Z"),
         set: 10,
+        userId: "test-user-id",
       });
       expect(record).toEqual(mockSupabaseResponse.data[0]);
     });
@@ -109,7 +111,10 @@ describe("TrainingRecordRepository", () => {
   describe("delete", () => {
     test("deletes a training record", async () => {
       await expect(
-        repository.delete("123e4567-e89b-12d3-a456-426614174001")
+        repository.delete(
+          "123e4567-e89b-12d3-a456-426614174001",
+          "test-user-id"
+        )
       ).resolves.not.toThrow();
     });
   });

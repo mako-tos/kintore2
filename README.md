@@ -73,7 +73,7 @@ Authorized redirect URIs:
 8. SupabaseのURL設定を更新する
 
 - Authentication > URL Configuration を開く
-- Site URLを`http://localhost:3000`更新
+- Site URLを`http://localhost:3000`または`本番URL`に更新
 
 9. OAuth Appsを設定する
 

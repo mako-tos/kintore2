@@ -55,7 +55,7 @@ describe("TrainingMenuRepository", () => {
 
   describe("findAll", () => {
     test("returns all active training menus", async () => {
-      const menus = await repository.findAll();
+      const menus = await repository.findAll("test-user-id");
       expect(menus).toEqual(mockSupabaseResponse.data);
     });
   });
@@ -63,7 +63,8 @@ describe("TrainingMenuRepository", () => {
   describe("findById", () => {
     test("returns a training menu by id", async () => {
       const menu = await repository.findById(
-        "123e4567-e89b-12d3-a456-426614174000"
+        "123e4567-e89b-12d3-a456-426614174000",
+        "test-user-id"
       );
       expect(menu).toEqual(mockSupabaseResponse.data[0]);
     });
@@ -71,7 +72,7 @@ describe("TrainingMenuRepository", () => {
 
   describe("create", () => {
     test("creates a new training menu", async () => {
-      const menu = await repository.create("スクワット");
+      const menu = await repository.create("スクワット", "test-user-id");
       expect(menu).toEqual(mockSupabaseResponse.data);
     });
   });
@@ -80,7 +81,8 @@ describe("TrainingMenuRepository", () => {
     test("updates a training menu", async () => {
       const menu = await repository.update(
         "123e4567-e89b-12d3-a456-426614174000",
-        "スクワット"
+        "スクワット",
+        "test-user-id"
       );
       expect(menu).toEqual(mockSupabaseResponse.data);
     });

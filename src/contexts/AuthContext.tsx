@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
+import { Profile } from "@/types/profile";
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
+  profile: Profile | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -17,6 +19,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,11 +27,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);
 
-      // ログイン直後にバックフィル実行（既に実行済みならスキップ）
+      // プロフィール取得
       if (session?.user) {
+        fetchProfile(session.user.id);
         tryBackfill();
+      } else {
+        setLoading(false);
       }
     });
 
@@ -38,16 +43,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);
 
-      // ログイン時にバックフィル実行
+      // ログイン時にプロフィール取得とバックフィル実行
       if (session?.user) {
+        fetchProfile(session.user.id);
         tryBackfill();
+      } else {
+        setProfile(null);
+        setLoading(false);
       }
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // プロフィール取得
+  const fetchProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", userId)
+        .single();
+
+      if (error) {
+        console.error("Profile fetch error:", error);
+        setProfile(null);
+      } else {
+        setProfile(data);
+      }
+    } catch (e) {
+      console.error("Profile fetch exception:", e);
+      setProfile(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // 初回バックフィル処理（非同期、エラーは無視）
   const tryBackfill = async () => {
@@ -93,6 +124,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const value = {
     user,
     session,
+    profile,
     loading,
     signInWithGoogle,
     signOut,

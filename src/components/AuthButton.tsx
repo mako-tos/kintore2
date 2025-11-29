@@ -7,7 +7,7 @@ import ErrorMessage from "./ErrorMessage";
  * ログイン/ログアウトボタンとユーザー情報を表示
  */
 export const AuthButton: React.FC = () => {
-  const { user, loading, signInWithGoogle, signOut } = useAuth();
+  const { user, profile, loading, signInWithGoogle, signOut } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -39,17 +39,18 @@ export const AuthButton: React.FC = () => {
   }
 
   if (user) {
+    const displayName = profile?.display_name || user.email;
+
     return (
       <div className="auth-button-container">
-        <span className="auth-user-email">{user.email}</span>
-        <button
-          type="button"
-          className="pure-button"
+        <span className="auth-user-email">{displayName}</span>
+        <a
+          className="nav-link"
           onClick={handleSignOut}
-          disabled={isLoggingOut}
+          style={{ cursor: isLoggingOut ? "not-allowed" : "pointer" }}
         >
           {isLoggingOut ? "ログアウト中..." : "ログアウト"}
-        </button>
+        </a>
         {error && <ErrorMessage errors={[{ field: "auth", message: error }]} />}
       </div>
     );

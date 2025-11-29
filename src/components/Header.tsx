@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import Navigation from "./Navigation";
 import AuthButton from "./AuthButton";
 
@@ -22,10 +23,10 @@ export const Header: React.FC = () => {
     <header className="app-header">
       <div className="app-header-container">
         {/* アプリケーション名/ロゴ */}
-        <div className="app-logo">
+        <Link href="/" className="app-logo">
           <span className="app-logo-icon">💪</span>
           <span className="app-logo-text">筋トレ記録</span>
-        </div>
+        </Link>
 
         {/* PC 表示用ナビゲーション */}
         <div className="app-nav-desktop">
