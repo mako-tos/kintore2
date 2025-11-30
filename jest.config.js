@@ -1,14 +1,14 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  testEnvironment: 'jsdom',
+  testEnvironment: "jsdom",
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
   transform: {
-    '^.+\\.(ts|tsx)$': 'babel-jest'
+    "^.+\\.(ts|tsx)$": "babel-jest",
   },
-  testMatch: ['**/__tests__/**/*.test.(ts|tsx)', '**/?(*.)+(test).(ts|tsx)'],
+  testMatch: ["**/__tests__/**/*.test.(ts|tsx)", "**/?(*.)+(test).(ts|tsx)"],
   extensionsToTreatAsEsm: [],
-  setupFiles: ['dotenv/config'],
-  setupFilesAfterEnv: ['<rootDir>/src/test/setup-tests.ts']
+  setupFiles: ["dotenv/config"],
+  setupFilesAfterEnv: ["<rootDir>/src/test/setup-tests.ts"],
 };
