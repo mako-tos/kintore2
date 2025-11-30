@@ -10,10 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      NEXT_PUBLIC_SUPABASE_URL: https://rwvkjehrpetbxroqkgdr.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3dmtqZWhycGV0Ynhyb3FrZ2RyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3Mjg5MjMsImV4cCI6MjA3OTMwNDkyM30.QmBTHbQ_e_z-dpdqqHrR5aeqlkSMXHKcHu-Fg13EoAs
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-    steps:
+    test:
       - uses: actions/checkout@v4
       - name: Use Node.js 22
         uses: actions/setup-node@v4
