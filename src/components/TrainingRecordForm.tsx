@@ -86,7 +86,7 @@ export const TrainingRecordForm: React.FC<Props> = ({ onAutoSaved }) => {
     (async () => {
       try {
         const data = await apiClient.get<TrainingMenuDto[]>(
-          "/api/training-menus"
+          "/api/training-menus?status=active"
         );
         setMenus(data);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

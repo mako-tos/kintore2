@@ -15,7 +15,16 @@ export default async function handler(
 
     switch (req.method) {
       case "GET": {
-        const menus = await repository.findAll(userId);
+        const statusParam = req.query.status;
+        let status: number | undefined;
+
+        if (statusParam === "active") {
+          status = 0;
+        } else if (statusParam === "inactive") {
+          status = 1;
+        }
+
+        const menus = await repository.findAll(userId, status);
         res.status(200).json(menus);
         break;
       }

@@ -22,13 +22,19 @@ export class TrainingMenuRepository {
     );
   }
 
-  async findAll(userId: string): Promise<TrainingMenu[]> {
+  async findAll(userId: string, status?: number): Promise<TrainingMenu[]> {
     // RLS で user_id フィルタリングされるため、キャッシュはユーザー別に管理すべきだが
     // 簡易実装としてキャッシュを無効化（または userId 別キャッシュに拡張可能）
-    const { data, error } = await supabaseServer
+    let query = supabaseServer
       .from("training_menus")
       .select("*")
-      .eq("user_id", userId)
+      .eq("user_id", userId);
+
+    if (status !== undefined) {
+      query = query.eq("status", status);
+    }
+
+    const { data, error } = await query
       .order("sort_order", { ascending: true })
       .order("name", { ascending: true });
 
