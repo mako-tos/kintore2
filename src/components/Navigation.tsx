@@ -14,8 +14,8 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: "/", label: "ホーム", icon: "🏠" },
   { href: "/calendar", label: "カレンダー", icon: "📅" },
+  { href: "/training-menus", label: "メニュー一覧", icon: "📋" },
   { href: "/training-menus/new", label: "メニュー作成", icon: "➕" },
-  { href: "/training-records/new", label: "記録登録", icon: "✏️" },
 ];
 
 interface NavigationProps {

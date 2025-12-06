@@ -29,7 +29,7 @@ export class TrainingMenuRepository {
       .from("training_menus")
       .select("*")
       .eq("user_id", userId)
-      .eq("status", 0)
+      .order("sort_order", { ascending: true })
       .order("name", { ascending: true });
 
     if (error) {
@@ -103,6 +103,51 @@ export class TrainingMenuRepository {
 
     if (error) {
       throw new Error(`Failed to delete training menu: ${error.message}`);
+    }
+  }
+
+  async updateStatus(
+    id: string,
+    status: number,
+    userId: string
+  ): Promise<TrainingMenu> {
+    const { data, error } = await supabaseServer
+      .from("training_menus")
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq("id", id)
+      .eq("user_id", userId)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(
+        `Failed to update training menu status: ${error.message}`
+      );
+    }
+
+    return data;
+  }
+
+  async updateOrder(
+    items: { id: string; sortOrder: number }[],
+    userId: string
+  ): Promise<void> {
+    const updates = items.map((item) =>
+      supabaseServer
+        .from("training_menus")
+        .update({
+          sort_order: item.sortOrder,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", item.id)
+        .eq("user_id", userId)
+    );
+
+    const results = await Promise.all(updates);
+
+    const error = results.find((r) => r.error);
+    if (error) {
+      throw new Error(`Failed to update order: ${error.error?.message}`);
     }
   }
 }

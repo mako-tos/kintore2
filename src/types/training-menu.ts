@@ -3,6 +3,7 @@ export interface TrainingMenu {
   user_id: string;
   name: string;
   status: number;
+  sort_order: number;
   created_at: string;
   updated_at?: string;
 }

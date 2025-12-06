@@ -4,10 +4,11 @@
   "type": "object",
   "properties": {
     "id": { "type": "string", "format": "uuid" },
-    "userId": { "type": "string", "format": "uuid" },
+    "user_id": { "type": "string", "format": "uuid" },
     "name": { "type": "string", "maxLength": 20 },
     "status": { "type": "number", "enum": [0, 1] },
-    "createdAt": { "type": "string", "format": "date-time" }
+    "sort_order": { "type": "integer" },
+    "created_at": { "type": "string", "format": "date-time" }
   },
-  "required": ["id", "userId", "name", "status", "createdAt"]
+  "required": ["id", "user_id", "name", "status", "sort_order", "created_at"]
 }

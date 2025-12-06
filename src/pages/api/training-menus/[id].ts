@@ -41,6 +41,21 @@ export default async function handler(
         res.status(200).json(updatedMenu);
         break;
       }
+      case "PATCH": {
+        if (typeof req.body.status !== "number") {
+          res
+            .status(400)
+            .json({ message: "Invalid request: status is required" });
+          return;
+        }
+        const updatedMenu = await repository.updateStatus(
+          id,
+          req.body.status,
+          userId
+        );
+        res.status(200).json(updatedMenu);
+        break;
+      }
       case "DELETE": {
         await repository.delete(id, userId);
         res.status(204).end();
