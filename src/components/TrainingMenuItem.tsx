@@ -54,7 +54,7 @@ export const TrainingMenuItem: React.FC<Props> = ({ menu, onStatusChange }) => {
             color: "white",
             fontSize: "0.8em",
           }}
-          onClick={(e) => {
+          onClick={() => {
             onStatusChange(menu.id, menu.status === 0 ? 1 : 0);
           }}
         >

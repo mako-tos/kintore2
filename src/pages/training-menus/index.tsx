@@ -21,6 +21,7 @@ export default function TrainingMenuListPage() {
       const data = await apiClient.get<TrainingMenu[]>("/api/training-menus");
       setMenus(data);
       setError(null);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Failed to fetch menus");
     } finally {
@@ -38,6 +39,7 @@ export default function TrainingMenuListPage() {
         sortOrder: m.sort_order,
       }));
       await apiClient.put("/api/training-menus/reorder", { items });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Failed to save order:", err);
       setError("Failed to save order");
@@ -52,6 +54,7 @@ export default function TrainingMenuListPage() {
 
     try {
       await apiClient.patch(`/api/training-menus/${id}`, { status });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Failed to update status:", err);
       setError("Failed to update status");

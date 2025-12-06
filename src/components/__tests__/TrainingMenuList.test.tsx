@@ -7,7 +7,7 @@ import { TrainingMenu } from "@/types/training-menu";
 // Mock dnd-kit
 jest.mock("@dnd-kit/sortable", () => ({
   ...jest.requireActual("@dnd-kit/sortable"),
-  useSortable: ({ id }: { id: string }) => ({
+  useSortable: () => ({
     attributes: {},
     listeners: {},
     setNodeRef: jest.fn(),

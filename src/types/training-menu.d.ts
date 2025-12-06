@@ -1,8 +1,9 @@
 export interface TrainingMenu {
   id: string;
-  userId: string;
+  user_id: string;
   name: string;
   status: 0 | 1;
-  createdAt: string;
+  sort_order: number;
+  created_at: string;
   [k: string]: unknown;
 }
