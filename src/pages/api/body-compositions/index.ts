@@ -36,8 +36,12 @@ export default async function handler(
       });
 
       res.status(201).json(newRecord);
+    } else if (req.method === "GET") {
+      const records = await repository.findByUserId(userId);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      res.status(200).json(records as any);
     } else {
-      res.setHeader("Allow", ["POST"]);
+      res.setHeader("Allow", ["POST", "GET"]);
       res.status(405).json({ message: `Method ${req.method} Not Allowed` });
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
