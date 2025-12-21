@@ -35,7 +35,6 @@ const BodyCompositionList: React.FC = () => {
       );
 
       const processedData = data.map((item) => {
-        console.log("Raw data:", item);
         const dateObj = new Date(item.date);
         return {
           ...item,
@@ -80,28 +79,28 @@ const BodyCompositionList: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">体組成情報</h1>
+    <div className="container">
+      <div className="bc-header">
+        <h1 className="bc-title">体組成情報</h1>
         <Link
           href="/body-composition/new"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bc-add-button"
         >
-          体組成情報を登録
+          ⚖️ 体組成情報を登録
         </Link>
       </div>
 
       {data.length === 0 ? (
-        <div className="text-center py-10">
-          <p className="mb-4">データがありません。</p>
+        <div className="bc-empty-state">
+          <p className="bc-empty-text">データがありません。</p>
           <p>「体組成情報を登録」ボタンからデータを登録してください。</p>
         </div>
       ) : (
-        <div className="space-y-12">
+        <div className="bc-charts-container">
           {/* 体脂肪率グラフ */}
-          <div className="bg-white p-4 rounded shadow">
-            <h2 className="text-xl font-bold mb-4 text-center">体脂肪率</h2>
-            <div className="h-[400px] w-full">
+          <div className="bc-chart-card">
+            <h2 className="bc-chart-title">体脂肪率</h2>
+            <div className="bc-chart-wrapper">
               <ResponsiveContainer width="100%" height="100%" minHeight={400}>
                 <ComposedChart
                   data={data}
@@ -166,9 +165,9 @@ const BodyCompositionList: React.FC = () => {
           </div>
 
           {/* 筋肉量グラフ */}
-          <div className="bg-white p-4 rounded shadow">
-            <h2 className="text-xl font-bold mb-4 text-center">筋肉量</h2>
-            <div className="h-[400px] w-full">
+          <div className="bc-chart-card">
+            <h2 className="bc-chart-title">筋肉量</h2>
+            <div className="bc-chart-wrapper">
               <ResponsiveContainer width="100%" height="100%" minHeight={400}>
                 <LineChart
                   data={data}

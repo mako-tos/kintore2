@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { TrainingMenu } from "@/types/training-menu";
 import { TrainingMenuList } from "@/components/TrainingMenuList";
 import { apiClient } from "@/lib/api-client";
@@ -67,7 +68,15 @@ export default function TrainingMenuListPage() {
 
   return (
     <div className="content-wrapper" style={{ padding: "1rem" }}>
+      <div className="bc-header">
       <h1>トレーニングメニュー一覧</h1>
+        <Link
+          href="/training-menus/new"
+          className="bc-add-button"
+        >
+          ➕ トレーニングメニューを登録
+        </Link>
+      </div>
       <TrainingMenuList
         menus={menus}
         onReorder={handleReorder}
