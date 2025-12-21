@@ -11,7 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function NewBodyComposition() {
   const router = useRouter();
   const { user, session } = useAuth();
-  const [file, setFile] = useState<File | null>(null);
+  const [, setFile] = useState<File | null>(null);
   const [parsedData, setParsedData] = useState<ParsedBodyComposition | null>(
     null
   );
@@ -65,6 +65,7 @@ export default function NewBodyComposition() {
           leanBodyMass: data.leanBodyMass.toString(),
           muscleMass: data.muscleMass.toString(),
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         console.error(err);
         setError(err.message || "ファイルの読み込みに失敗しました");
@@ -112,6 +113,8 @@ export default function NewBodyComposition() {
 
       // 成功したらトップへ戻る
       router.push("/");
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
       setError(err.message);

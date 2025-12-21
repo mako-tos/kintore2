@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prebuild": "npm run generate-types",
+    "prebuild": "npm audit fix && npm run generate-types",
     "build": "next build",
-    "build:netlify": "rm -rf ./node_modules && npm install --omit=dev && npm run build && npm i && npm run lint && npm run contract-test",
+    "test:netlify": "rm -rf ./node_modules && npm install --omit=dev && npm run build && npm i && npm run lint && npm run contract-test",
     "build:contract": "tsc -p tsconfig.testbuild.json",
     "typecheck": "tsc --noEmit",
     "test": "dotenv -e .env.development jest",

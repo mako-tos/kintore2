@@ -40,6 +40,7 @@ export default async function handler(
       res.setHeader("Allow", ["POST"]);
       res.status(405).json({ message: `Method ${req.method} Not Allowed` });
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.message === "Unauthorized") {
       res.status(401).json({ message: "Unauthorized" });
