@@ -16,6 +16,8 @@ const navItems: NavItem[] = [
   { href: "/calendar", label: "カレンダー", icon: "📅" },
   { href: "/training-menus", label: "メニュー一覧", icon: "📋" },
   { href: "/training-menus/new", label: "メニュー作成", icon: "➕" },
+  { href: "/body-composition", label: "体組成一覧", icon: "📊" },
+  { href: "/body-composition/new", label: "体組成登録", icon: "⚖️" },
 ];
 
 interface NavigationProps {
